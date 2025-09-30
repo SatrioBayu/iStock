@@ -1,22 +1,32 @@
-import { useState } from "react";
-// import "./App.css";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home";
 import RiwayatPengajuan from "./pages/RiwayatPengajuan";
+import PengajuanBarang from "./pages/PengajuanBarang";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RootLayout from "./pages/RootLayout";
 
 function App() {
-  return (
-    <>
-      <Header />
-      <div className="container-md p-4 border">
-        <Home />
-        {/* <RiwayatPengajuan /> */}
-      </div>
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [
+        {
+          path: "",
+          element: <Home />,
+        },
+        {
+          path: "pengajuan-barang",
+          element: <PengajuanBarang />,
+        },
+        {
+          path: "riwayat-pengajuan",
+          element: <RiwayatPengajuan />,
+        },
+      ],
+    },
+  ]);
 
-      <Footer />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

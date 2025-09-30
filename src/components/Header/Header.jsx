@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Header.module.css";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   return (
@@ -28,15 +29,27 @@ function Header() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
-              <a className="nav-link active" aria-current="page" href="#">
+              <NavLink
+                to="/"
+                className={`nav-link ${({ isActive }) =>
+                  isActive ? "active" : undefined}`}
+              >
                 Beranda
-              </a>
-              <a className="nav-link" href="#">
+              </NavLink>
+              <NavLink
+                to="pengajuan-barang"
+                className={`nav-link ${({ isActive }) =>
+                  isActive ? "active" : undefined}`}
+              >
                 Pengajuan Barang
-              </a>
-              <a className="nav-link" href="#">
-                Riwayat Pengajuan Barang
-              </a>
+              </NavLink>
+              <NavLink
+                to="riwayat-pengajuan"
+                className={`nav-link ${({ isActive }) =>
+                  isActive ? "active" : undefined}`}
+              >
+                Riwayat Pengajuan
+              </NavLink>
             </div>
           </div>
           <a className="navbar-brand" href="#">
