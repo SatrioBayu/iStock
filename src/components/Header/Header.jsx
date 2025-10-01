@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Header.module.css";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Header() {
   return (
@@ -52,9 +52,9 @@ function Header() {
               </NavLink>
             </div>
           </div>
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to="/login">
             <button className="btn btn-outline-success">Login</button>
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

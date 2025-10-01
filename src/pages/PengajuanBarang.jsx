@@ -21,6 +21,8 @@ function PengajuanBarang() {
     },
   ]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [barangOptions, setBarangOptions] = useState(DUMMY);
 
   const selectedBarang = barangList
@@ -43,6 +45,10 @@ function PengajuanBarang() {
       barang: barangList,
     };
     console.log(data);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleChange = (uid, field, value) => {
@@ -115,7 +121,14 @@ function PengajuanBarang() {
           >
             Tambah Barang
           </button>
-          <button className="btn btn-success">Ajukan</button>
+          {isLoading ? (
+            <button className="btn btn-success disabled">
+              <span className="spinner-border spinner-border-sm"></span>Sedang
+              Mengajukan...
+            </button>
+          ) : (
+            <button className="btn btn-success">Ajukan</button>
+          )}
         </div>
       </form>
     </div>

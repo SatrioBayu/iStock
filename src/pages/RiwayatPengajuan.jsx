@@ -74,9 +74,6 @@ function RiwayatPengajuan() {
       item.date.toLowerCase().includes(pencarian.toLowerCase()) ||
       item.namaPemohon.toLowerCase().includes(pencarian.toLowerCase())
   );
-  // const handlePencarian = () => {
-  //   setRiwayat(filteredList);
-  // };
 
   return (
     <div className="table-responsive container-fluid">

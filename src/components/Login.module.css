@@ -1,0 +1,35 @@
+.bg {
+  background-color: #588cc0 !important;
+  height: 100vh;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrapper * {
+  font-family: "Poppins", sans-serif;
+}
+.no-margin {
+  margin: 0;
+}
+.isi {
+  background-color: #fff;
+  width: 50rem;
+}
+.secondary {
+  color: #727272;
+}
+.btn-login {
+  background-color: #205493;
+  color: white;
+  border-radius: 5px;
+}
+.btn-login:hover {
+  background-color: white;
+  color: #205493;
+  border-color: #205493;
+}
+.img-logo {
+  width: 7em;
+}
