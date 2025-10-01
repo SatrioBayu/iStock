@@ -3,6 +3,8 @@ import RiwayatPengajuan from "./pages/RiwayatPengajuan";
 import PengajuanBarang from "./pages/PengajuanBarang";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./pages/RootLayout";
+import DetailRiwayatPengajuan from "./pages/DetailRiwayatPengajuan";
+import { loader as detailRiwayatLoader } from "./pages/DetailRiwayatPengajuan";
 
 function App() {
   const router = createBrowserRouter([
@@ -20,7 +22,17 @@ function App() {
         },
         {
           path: "riwayat-pengajuan",
-          element: <RiwayatPengajuan />,
+          children: [
+            {
+              path: "",
+              element: <RiwayatPengajuan />,
+            },
+            {
+              path: ":id",
+              element: <DetailRiwayatPengajuan />,
+              loader: detailRiwayatLoader,
+            },
+          ],
         },
       ],
     },

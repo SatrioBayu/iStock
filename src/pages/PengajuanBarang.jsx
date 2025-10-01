@@ -55,7 +55,7 @@ function PengajuanBarang() {
       if (field === "barang") {
         const idx = newList.findIndex((it) => it.uid === uid);
         const barangTerpilih = barangOptions.find(
-          (b) => String(b.id) === String(value)
+          (b) => String(b.nama) === value
         );
         if (idx !== -1) {
           newList[idx] = {
@@ -72,7 +72,6 @@ function PengajuanBarang() {
   const handleRemove = (uid) => {
     setBarangList((prev) => {
       if (prev.length === 1) {
-        alert("Minimal harus ada 1 barang yang diajukan");
         return prev;
       }
       return prev.filter((item) => item.uid !== uid);

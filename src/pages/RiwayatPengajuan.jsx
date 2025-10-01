@@ -1,20 +1,66 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const DUMMY = [
+export const DUMMY = [
   {
-    id: "FORM/22/IX/25",
+    id: "FORM-22-IX-25",
     date: "22 September 2025",
     status: "Menunggu Persetujuan",
+    namaPemohon: "Bayu",
+    barang: [
+      {
+        nama: "Kertas F4",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A5",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A4",
+        jumlah: 3,
+      },
+    ],
   },
   {
-    id: "FORM/23/IX/25",
+    id: "FORM-23-IX-25",
     date: "23 September 2025",
     status: "Ditolak",
+    namaPemohon: "Fariz",
+    barang: [
+      {
+        nama: "Kertas F4",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A5",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A4",
+        jumlah: 3,
+      },
+    ],
   },
   {
-    id: "FORM/24/IX/25",
+    id: "FORM-24-IX-25",
     date: "24 September 2025",
     status: "Disetujui",
+    namaPemohon: "Sani",
+    barang: [
+      {
+        nama: "Kertas F4",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A5",
+        jumlah: 3,
+      },
+      {
+        nama: "Kertas A4",
+        jumlah: 3,
+      },
+    ],
   },
 ];
 
@@ -22,8 +68,11 @@ function RiwayatPengajuan() {
   const [riwayat, setRiwayat] = useState(DUMMY);
   const [pencarian, setPencarian] = useState("");
 
-  const filteredList = riwayat.filter((item) =>
-    item.id.toLowerCase().includes(pencarian.toLowerCase())
+  const filteredList = riwayat.filter(
+    (item) =>
+      item.id.toLowerCase().includes(pencarian.toLowerCase()) ||
+      item.date.toLowerCase().includes(pencarian.toLowerCase()) ||
+      item.namaPemohon.toLowerCase().includes(pencarian.toLowerCase())
   );
   // const handlePencarian = () => {
   //   setRiwayat(filteredList);
@@ -47,6 +96,7 @@ function RiwayatPengajuan() {
         <thead>
           <tr className="table-active">
             <th>Nomor Pengajuan</th>
+            <th>Nama Pemohon</th>
             <th>Tanggal Pengajuan</th>
             <th>Status</th>
           </tr>
@@ -56,28 +106,31 @@ function RiwayatPengajuan() {
             filteredList.map((data) => (
               <tr key={data.id}>
                 <td>{data.id}</td>
+                <td>{data.namaPemohon}</td>
                 <td>{data.date}</td>
                 <td>
-                  <button
-                    className={`btn ${
-                      data.status === "Menunggu Persetujuan"
-                        ? "btn-warning"
-                        : data.status === "Ditolak"
-                        ? "btn-danger"
-                        : data.status === "Disetujui"
-                        ? "btn-success"
-                        : undefined
-                    }`}
-                  >
-                    {data.status}
-                  </button>
+                  <Link to={data.id}>
+                    <button
+                      className={`btn ${
+                        data.status === "Menunggu Persetujuan"
+                          ? "btn-warning"
+                          : data.status === "Ditolak"
+                          ? "btn-danger"
+                          : data.status === "Disetujui"
+                          ? "btn-success"
+                          : undefined
+                      }`}
+                    >
+                      {data.status}
+                    </button>
+                  </Link>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
               <td colSpan="3" className="text-center">
-                <h5>Data Not Found...</h5>
+                <h6>Data pengajuan tidak ditemukan</h6>
               </td>
             </tr>
           )}
