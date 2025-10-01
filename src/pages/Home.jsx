@@ -5,7 +5,7 @@ function Home() {
   return (
     <>
       <h2 className="mb-3">Daftar Barang</h2>
-      <div className="g-4 row row-cols-1 row-cols-sm-2 row-cols-md-4">
+      <div className="g-4 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
         <Card />
         <Card />
         <Card />

@@ -1,8 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./Header.module.css";
 import { Link, NavLink } from "react-router-dom";
 
 function Header() {
+  const username = localStorage.getItem("username");
+  const [isLogin, setIsLogin] = useState(username ? true : false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    setIsLogin(false);
+  };
+
   return (
     <header>
       <nav className="navbar navbar-expand-md bg-body-tertiary sticky-top">
@@ -52,9 +60,28 @@ function Header() {
               </NavLink>
             </div>
           </div>
-          <Link className="navbar-brand" to="/login">
-            <button className="btn btn-outline-success">Login</button>
-          </Link>
+          {isLogin ? (
+            <div className="navbar-brand btn-group">
+              <button
+                className="btn btn-outline-success dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hi {username}
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <button onClick={handleLogout} className="btn dropdown-item">
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <Link className="navbar-brand" to="/login">
+              <button className="btn btn-outline-success">Login</button>
+            </Link>
+          )}
         </div>
       </nav>
     </header>

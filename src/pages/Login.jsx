@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styles from "../components/Login.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +17,8 @@ export default function Login() {
       setIsLoading(false);
     }, 1000);
 
-    console.log(data);
+    localStorage.setItem("username", data.username);
+    navigate("/");
   };
 
   return (
