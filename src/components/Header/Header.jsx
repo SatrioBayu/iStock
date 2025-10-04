@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styles from "./Header.module.css";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../store/auth-context";
 
 function Header() {
-  const username = localStorage.getItem("username");
-  const [isLogin, setIsLogin] = useState(username ? true : false);
+  const { user, logout, loading } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("username");
-    setIsLogin(false);
-  };
+  if (loading) {
+    return <nav className="navbar">Loading...</nav>;
+  }
 
   return (
     <header>
@@ -60,7 +59,29 @@ function Header() {
               </NavLink>
             </div>
           </div>
-          {isLogin ? (
+          {!user ? (
+            <Link className="navbar-brand" to="/login">
+              <button className="btn btn-success">Login</button>
+            </Link>
+          ) : (
+            <div className="navbar-brand btn-group">
+              <button
+                className="btn btn-outline-success dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hi {user.nama}
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <button onClick={logout} className="btn dropdown-item">
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+          {/* {isLogin ? (
             <div className="navbar-brand btn-group">
               <button
                 className="btn btn-outline-success dropdown-toggle"
@@ -79,9 +100,9 @@ function Header() {
             </div>
           ) : (
             <Link className="navbar-brand" to="/login">
-              <button className="btn btn-outline-success">Login</button>
+              <button className="btn btn-success">Login</button>
             </Link>
-          )}
+          )} */}
         </div>
       </nav>
     </header>

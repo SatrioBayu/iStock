@@ -1,10 +1,20 @@
 import React from "react";
+import Select from "react-select";
 
 function FormInput({ uid, data, onChange, onRemove, barangOptions }) {
   return (
     <div className="row row-cols-4">
       <div className="col">
         <label className="form-label">Nama Barang</label>
+        <Select
+          onChange={(e) => onChange(uid, "barang", e.target.value)}
+          options={barangOptions.map((barang) => ({
+            value: barang.nama_barang,
+            label: barang.nama_barang,
+          }))}
+          placeholder="-- Pilih Barang --"
+          isSearchable
+        />
         <select
           className="form-select"
           aria-label="Default select example"
@@ -13,8 +23,8 @@ function FormInput({ uid, data, onChange, onRemove, barangOptions }) {
         >
           <option value="">-- Pilih Barang --</option>
           {barangOptions.map((barang) => (
-            <option key={barang.id} value={barang.nama}>
-              {barang.nama}
+            <option key={barang.barcode} value={barang.nama_barang}>
+              {barang.nama_barang}
             </option>
           ))}
         </select>

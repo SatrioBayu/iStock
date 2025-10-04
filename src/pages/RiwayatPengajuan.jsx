@@ -1,84 +1,51 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
-export const DUMMY = [
-  {
-    id: "FORM-22-IX-25",
-    date: "22 September 2025",
-    status: "Menunggu Persetujuan",
-    namaPemohon: "Bayu",
-    barang: [
-      {
-        nama: "Kertas F4",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A5",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A4",
-        jumlah: 3,
-      },
-    ],
-  },
-  {
-    id: "FORM-23-IX-25",
-    date: "23 September 2025",
-    status: "Ditolak",
-    namaPemohon: "Fariz",
-    barang: [
-      {
-        nama: "Kertas F4",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A5",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A4",
-        jumlah: 3,
-      },
-    ],
-  },
-  {
-    id: "FORM-24-IX-25",
-    date: "24 September 2025",
-    status: "Disetujui",
-    namaPemohon: "Sani",
-    barang: [
-      {
-        nama: "Kertas F4",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A5",
-        jumlah: 3,
-      },
-      {
-        nama: "Kertas A4",
-        jumlah: 3,
-      },
-    ],
-  },
-];
+import React, { useState, useEffect } from "react";
+import RiwayatTable from "../components/RiwayatTable/RiwayatTable";
 
 function RiwayatPengajuan() {
-  const [riwayat, setRiwayat] = useState(DUMMY);
-  const [pencarian, setPencarian] = useState("");
+  // const [pencarian, setPencarian] = useState("");
+  const [riwayat, setRiwayat] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredList = riwayat.filter(
-    (item) =>
-      item.id.toLowerCase().includes(pencarian.toLowerCase()) ||
-      item.date.toLowerCase().includes(pencarian.toLowerCase()) ||
-      item.namaPemohon.toLowerCase().includes(pencarian.toLowerCase())
+  // const filteredList = riwayat.filter((item) => {
+  //   const formattedDate = dayjs(item.tanggal_request).format(
+  //     "DD MMMM YYYY HH:mm:ss"
+  //   );
+  //   return (
+  //     item.kode_request.toLowerCase().includes(pencarian.toLowerCase()) ||
+  //     formattedDate.toLowerCase().includes(pencarian.toLowerCase()) ||
+  //     item.nama_pemohon.toLowerCase().includes(pencarian.toLowerCase()) ||
+  //     item.status_request.toLowerCase().includes(pencarian.toLowerCase())
+  //   );
+  // });
+
+  useEffect(() => {
+    async function fetchDataRiwayat() {
+      try {
+        const response = await fetch("http://localhost:3000/request");
+        const data = await response.json();
+        setRiwayat(data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDataRiwayat();
+  }, []);
+
+  const menunggu = riwayat.filter(
+    (item) => item.status_request === "Menunggu Persetujuan"
   );
+  const ditolak = riwayat.filter((item) => item.status_request === "Ditolak");
+  const disetujui = riwayat.filter(
+    (item) => item.status_request === "Disetujui"
+  );
+  const selesai = riwayat.filter((item) => item.status_request === "Selesai");
 
   return (
     <div className="table-responsive container-fluid">
       <h2>Riwayat Pengajuan Barang</h2>
-      <div className="my-3 gy-2 row row-cols-1 row-cols-sm-3">
+      {/* <div className="my-3 gy-2 row row-cols-1 row-cols-sm-3">
         <div className="col">
           <input
             type="text"
@@ -88,8 +55,9 @@ function RiwayatPengajuan() {
             onChange={(e) => setPencarian(e.target.value)}
           />
         </div>
-      </div>
-      <table className="table table-striped table-hover">
+      </div> */}
+      {/* {loading && <Spinner />} */}
+      {/* <table className="table table-striped table-hover align-middle">
         <thead>
           <tr className="table-active">
             <th>Nomor Pengajuan</th>
@@ -102,23 +70,27 @@ function RiwayatPengajuan() {
           {filteredList.length > 0 ? (
             filteredList.map((data) => (
               <tr key={data.id}>
-                <td>{data.id}</td>
-                <td>{data.namaPemohon}</td>
-                <td>{data.date}</td>
+                <td>{data.kode_request}</td>
+                <td>{data.nama_pemohon}</td>
                 <td>
-                  <Link to={data.id}>
+                  {dayjs(data.tanggal_request).format("DD MMM YYYY HH:mm:ss")}
+                </td>
+                <td>
+                  <Link to={data.kode_request}>
                     <button
                       className={`btn ${
-                        data.status === "Menunggu Persetujuan"
+                        data.status_request === "Menunggu Persetujuan"
                           ? "btn-warning"
-                          : data.status === "Ditolak"
+                          : data.status_request === "Ditolak"
                           ? "btn-danger"
-                          : data.status === "Disetujui"
+                          : data.status_request === "Disetujui"
                           ? "btn-success"
+                          : data.status_request === "Selesai"
+                          ? "btn-primary"
                           : undefined
                       }`}
                     >
-                      {data.status}
+                      {data.status_request}
                     </button>
                   </Link>
                 </td>
@@ -126,13 +98,21 @@ function RiwayatPengajuan() {
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="text-center">
+              <td colSpan="4" className="text-center">
                 <h6>Data pengajuan tidak ditemukan</h6>
               </td>
             </tr>
           )}
         </tbody>
-      </table>
+      </table> */}
+      <RiwayatTable
+        title="Menunggu Persetujuan"
+        data={menunggu}
+        loading={loading}
+      />
+      <RiwayatTable title="Disetujui" data={disetujui} loading={loading} />
+      <RiwayatTable title="Selesai" data={selesai} loading={loading} />
+      <RiwayatTable title="Ditolak" data={ditolak} loading={loading} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import RootLayout from "./pages/RootLayout";
 import DetailRiwayatPengajuan from "./pages/DetailRiwayatPengajuan";
 import { loader as detailRiwayatLoader } from "./pages/DetailRiwayatPengajuan";
 import Login from "./pages/Login";
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,6 +18,11 @@ function App() {
           path: "",
           element: <Home />,
         },
+        // {
+        //   element: <PrivateRoute />,
+        //   children: [
+        //   ],
+        // },
         {
           path: "pengajuan-barang",
           element: <PengajuanBarang />,
@@ -29,7 +35,7 @@ function App() {
               element: <RiwayatPengajuan />,
             },
             {
-              path: ":id",
+              path: ":kode_request",
               element: <DetailRiwayatPengajuan />,
               loader: detailRiwayatLoader,
             },

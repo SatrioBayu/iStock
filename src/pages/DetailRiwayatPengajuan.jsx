@@ -1,13 +1,95 @@
-import React from "react";
-import { useLoaderData, useParams } from "react-router-dom";
-import { DUMMY } from "./RiwayatPengajuan";
+import { useContext } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import { AuthContext } from "../store/auth-context";
+import Swal from "sweetalert2";
 
 function DetailRiwayatPengajuan() {
-  const params = useParams();
   const loaderData = useLoaderData();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleAction = async (endpoint, successText) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/request/${loaderData.kode_request}/${endpoint}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+        }
+      );
+      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(res.errors[0].message || "Failed to approve request");
+      }
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: successText,
+        allowOutsideClick: false,
+        didClose: () => {
+          navigate("/riwayat-pengajuan");
+        },
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message || "Failed to finish request",
+        allowOutsideClick: false,
+      });
+    }
+  };
+
+  const renderStatus = () => {
+    const { status_request, tanggal_disetujui, tanggal_selesai } = loaderData;
+
+    const format = (date) => dayjs(date).format("DD MMM YYYY HH:mm:ss");
+
+    switch (status_request) {
+      case "Selesai":
+        return (
+          <>
+            <td className="fw-bold text-success">
+              Disetujui {format(tanggal_disetujui)}
+            </td>
+            <td className="fw-bold text-success">
+              Ditindaklanjut {format(tanggal_selesai)}
+            </td>
+          </>
+        );
+      case "Disetujui":
+        return (
+          <>
+            <td className="fw-bold text-success">Disetujui</td>
+            <td>Menunggu Tindak Lanjut...</td>
+          </>
+        );
+      case "Menunggu Persetujuan":
+        return (
+          <>
+            <td>Menunggu...</td>
+            <td>Menunggu...</td>
+          </>
+        );
+      case "Ditolak":
+        return (
+          <>
+            <td className="text-danger fw-bold">Ditolak</td>
+            <td className="text-danger fw-bold">Ditolak</td>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="container-fluid">
-      <h2>Detail Pengajuan {params.id}</h2>
+      <h2>Detail Pengajuan {loaderData.kode_request}</h2>
       <div className="row row-cols-8">
         <div className="col-12 col-sm-10 mb-3">
           <label htmlFor="exampleFormControlInput2" className="form-label">
@@ -17,13 +99,13 @@ function DetailRiwayatPengajuan() {
             type="text"
             className="form-control"
             id="exampleFormControlInput2"
-            value={loaderData.namaPemohon}
+            value={loaderData.nama_pemohon}
             disabled
           />
         </div>
       </div>
-      {loaderData.barang.map((barang) => (
-        <div key={barang.id} className="row">
+      {loaderData.Request_Details.map((detail) => (
+        <div key={detail.id} className="row">
           <div className="col-sm-8 col-md-9 mb-3">
             <label htmlFor="exampleFormControlInput2" className="form-label">
               Nama Barang
@@ -32,7 +114,7 @@ function DetailRiwayatPengajuan() {
               type="text"
               className="form-control"
               id="exampleFormControlInput2"
-              value={barang.nama}
+              value={detail.Barang.nama_barang}
               disabled
             />
           </div>
@@ -44,7 +126,7 @@ function DetailRiwayatPengajuan() {
               type="text"
               className="form-control"
               id="exampleFormControlInput2"
-              value={barang.jumlah}
+              value={detail.jumlah}
               disabled
             />
           </div>
@@ -58,41 +140,93 @@ function DetailRiwayatPengajuan() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            {loaderData.status === "Disetujui" && (
-              <>
-                <td className="fw-bold text-success">
-                  Disetujui {loaderData.date}
-                </td>
-                <td>Menunggu Tindak Lanjut...</td>
-              </>
-            )}
-            {loaderData.status === "Menunggu Persetujuan" && (
-              <>
-                <td>Menunggu...</td>
-                <td>Menunggu...</td>
-              </>
-            )}
-            {loaderData.status === "Ditolak" && (
-              <>
-                <td className="text-danger fw-bold">Ditolak</td>
-                <td className="text-danger fw-bold">Ditolak</td>
-              </>
-            )}
-          </tr>
+          <tr>{renderStatus()}</tr>
           <tr>
             <td>Andi Nur Hasbi Alauddin, S.E,. M.H.</td>
             <td>Muhammad Andy Alfariz, A.Md.Ak.</td>
           </tr>
         </tbody>
       </table>
+      <div className="mt-3">
+        {user?.role === "Kasubbag TURT" &&
+          loaderData.status_request === "Menunggu Persetujuan" && (
+            <>
+              <button
+                onClick={() =>
+                  handleAction("approve", "Request approved successfully")
+                }
+                className="btn btn-success me-2"
+              >
+                Setujui
+              </button>
+              <button
+                onClick={() =>
+                  handleAction("reject", "Request rejected successfully")
+                }
+                className="btn btn-danger me-2"
+              >
+                Tolak
+              </button>
+            </>
+          )}
+
+        {user?.role === "Pengelola BMN" &&
+          loaderData.status_request === "Disetujui" && (
+            <button
+              onClick={() =>
+                handleAction("finish", "Request finished successfully")
+              }
+              className="btn btn-primary me-2"
+            >
+              Selesaikan
+            </button>
+          )}
+
+        {loaderData.status_request === "Selesai" && (
+          <a
+            href={`http://localhost:3000/request/${loaderData.kode_request}/download`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-success"
+          >
+            Download
+          </a>
+        )}
+      </div>
+      {/*       
+      {user &&
+        user.role === "Kasubbag TURT" &&
+        loaderData.status_request === "Menunggu Persetujuan" && (
+          <button onClick={handleSetujui} className="btn btn-success">
+            Setujui
+          </button>
+        )}
+      {user &&
+        user.role === "Pengelola BMN" &&
+        loaderData.status_request === "Disetujui" && (
+          <button onClick={handleSelesai} className="btn btn-primary">
+            Selesaikan
+          </button>
+        )}
+      {loaderData.status_request === "Selesai" && (
+        <a
+          className="navbar-brand"
+          href={`http://localhost:3000/request/${loaderData.kode_request}/download`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <button className="btn btn-success">Download</button>
+        </a>
+      )} */}
     </div>
   );
 }
 
 export default DetailRiwayatPengajuan;
 
-export function loader({ req, params }) {
-  const data = DUMMY.find((item) => item.id == params.id);
-  return data;
+export async function loader({ req, params }) {
+  const kode_request = params.kode_request;
+  const response = await fetch(`http://localhost:3000/request/${kode_request}`);
+  const data = await response.json();
+  return data.data;
 }

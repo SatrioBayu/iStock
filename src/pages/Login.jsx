@@ -1,24 +1,37 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styles from "../components/Login.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../store/auth-context";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
     setIsLoading(true);
-
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        setIsLoading(false);
+        throw new Error(result.errors[0].message || "Login failed");
+      }
+      await login(result.token);
+      navigate("/");
+    } catch (error) {
+      setError(error.message);
       setIsLoading(false);
-    }, 1000);
-
-    localStorage.setItem("username", data.username);
-    navigate("/");
+    }
   };
 
   return (
@@ -67,6 +80,7 @@ export default function Login() {
             <button className={`btn ${styles["btn-login"]} mb-3`}>Login</button>
           )}
         </form>
+        {error && <p className="text-danger">{error}</p>}
 
         <NavLink to="/">
           <p className="mb-0">Kembali ke Beranda</p>
