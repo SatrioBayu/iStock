@@ -54,6 +54,8 @@
 // export default BarangInfo;
 
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../config";
 
 const BarangInfo = ({ barang, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -72,7 +74,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
   const handleSave = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/barang/${barang.id}`,
+        `${API_BASE_URL}/admin/barang/${formData.barcode}`,
         {
           method: "PATCH",
           headers: {
@@ -82,14 +84,28 @@ const BarangInfo = ({ barang, onUpdate }) => {
           body: JSON.stringify(formData),
         }
       );
+
       if (!res.ok) throw new Error("Gagal memperbarui data");
 
       const updated = await res.json();
-      onUpdate(updated); // kirim ke parent agar state utama ikut update
+      onUpdate(updated);
       setIsEditing(false);
+
+      // tampilkan notifikasi sukses
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Data barang berhasil diperbarui.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan saat menyimpan perubahan.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Terjadi kesalahan saat menyimpan perubahan.",
+      });
     }
   };
 
@@ -135,7 +151,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="kode_barang"
               className="form-control"
-              value={formData.barcode}
+              defaultValue={formData.barcode}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -147,7 +163,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="nama_barang"
               className="form-control"
-              value={formData.nama_barang}
+              defaultValue={formData.nama_barang}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -159,7 +175,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="number"
               name="stok"
               className="form-control"
-              value={formData.stok}
+              defaultValue={formData.stok}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -171,7 +187,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="kategori"
               className="form-control"
-              value={formData.satuan || ""}
+              defaultValue={formData.satuan || ""}
               onChange={handleChange}
               disabled={!isEditing}
             />

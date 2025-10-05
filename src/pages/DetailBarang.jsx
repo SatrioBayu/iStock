@@ -88,8 +88,11 @@ const DetailBarang = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`${API_BASE_URL}/barang/${barangId}`, {
+        const res = await fetch(`${API_BASE_URL}/admin/barang/${barcode}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
         });
 
         if (!res.ok) throw new Error("Gagal menghapus barang");
