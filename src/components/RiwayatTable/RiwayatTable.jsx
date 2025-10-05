@@ -1,9 +1,8 @@
 import { useState } from "react";
-import Spinner from "../Spinners/Spinner";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
-function RiwayatTable({ title, data, loading }) {
+function RiwayatTable({ title, data }) {
   const [pencarian, setPencarian] = useState("");
   const filteredData = data.filter((item) => {
     return (
@@ -18,7 +17,7 @@ function RiwayatTable({ title, data, loading }) {
   });
 
   return (
-    <div className="border rounded p-3 my-5">
+    <div className="border rounded p-3 my-3">
       <h5 className="mb-0">Riwayat Pengajuan Barang yang {title}</h5>
       <div className="my-3 gy-2 row row-cols-1 row-cols-sm-3">
         <div className="col">
@@ -31,7 +30,6 @@ function RiwayatTable({ title, data, loading }) {
           />
         </div>
       </div>
-      {loading && <Spinner />}
       <table className="table table-striped table-hover align-middle">
         <thead>
           <tr className="table-active">

@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import styles from "../components/Login.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../store/auth-context";
+import { API_BASE_URL } from "../config";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function Login() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

@@ -81,28 +81,6 @@ function Header() {
               </ul>
             </div>
           )}
-          {/* {isLogin ? (
-            <div className="navbar-brand btn-group">
-              <button
-                className="btn btn-outline-success dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Hi {username}
-              </button>
-              <ul className="dropdown-menu dropdown-menu-end">
-                <li>
-                  <button onClick={handleLogout} className="btn dropdown-item">
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            <Link className="navbar-brand" to="/login">
-              <button className="btn btn-success">Login</button>
-            </Link>
-          )} */}
         </div>
       </nav>
     </header>

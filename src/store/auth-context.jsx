@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../config";
 
 export const AuthContext = createContext({
   user: null,
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async (token) => {
     try {
-      const res = await fetch("http://localhost:3000/user", {
+      const res = await fetch(`${API_BASE_URL}/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Gagal ambil data user");

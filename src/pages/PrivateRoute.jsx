@@ -1,14 +1,16 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../store/auth-context";
 
-export default function PrivateRoute() {
-  const isLoggedIn = localStorage.getItem("username"); // atau token
-
+function PrivateRoute({ allowedRoles }) {
+  const { user } = useContext(AuthContext);
   const location = useLocation();
 
-  if (!isLoggedIn) {
-    // simpan lokasi terakhir biar bisa redirect balik setelah login
-    return <Navigate to="/login" replace state={{ from: location }} />;
+  // Cek user role
+  if (user && allowedRoles.includes(user.role)) {
+    return <Outlet />;
   }
-
-  return <Outlet />;
+  // Jika tidak ada user atau role tidak sesuai, redirect ke halaman login
+  return <Navigate to="/login" state={{ from: location }} replace />;
 }
+export default PrivateRoute;

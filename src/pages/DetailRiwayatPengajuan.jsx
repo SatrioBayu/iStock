@@ -1,18 +1,21 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { AuthContext } from "../store/auth-context";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../config";
 
 function DetailRiwayatPengajuan() {
   const loaderData = useLoaderData();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAction = async (endpoint, successText) => {
     try {
+      setIsLoading(true);
       const response = await fetch(
-        `http://localhost:3000/request/${loaderData.kode_request}/${endpoint}`,
+        `${API_BASE_URL}/request/${loaderData.kode_request}/${endpoint}`,
         {
           method: "PATCH",
           headers: {
@@ -41,6 +44,8 @@ function DetailRiwayatPengajuan() {
         text: error.message || "Failed to finish request",
         allowOutsideClick: false,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,40 +156,80 @@ function DetailRiwayatPengajuan() {
         {user?.role === "Kasubbag TURT" &&
           loaderData.status_request === "Menunggu Persetujuan" && (
             <>
-              <button
-                onClick={() =>
-                  handleAction("approve", "Request approved successfully")
-                }
-                className="btn btn-success me-2"
-              >
-                Setujui
-              </button>
-              <button
-                onClick={() =>
-                  handleAction("reject", "Request rejected successfully")
-                }
-                className="btn btn-danger me-2"
-              >
-                Tolak
-              </button>
+              {isLoading ? (
+                <>
+                  <button
+                    onClick={() =>
+                      handleAction("approve", "Request approved successfully")
+                    }
+                    className="btn btn-success me-2"
+                    disabled
+                  >
+                    Setujui
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleAction("reject", "Request rejected successfully")
+                    }
+                    className="btn btn-danger me-2"
+                    disabled
+                  >
+                    Tolak
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() =>
+                      handleAction("approve", "Request approved successfully")
+                    }
+                    className="btn btn-success me-2"
+                  >
+                    Setujui
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleAction("reject", "Request rejected successfully")
+                    }
+                    className="btn btn-danger me-2"
+                  >
+                    Tolak
+                  </button>
+                </>
+              )}
             </>
           )}
 
         {user?.role === "Pengelola BMN" &&
           loaderData.status_request === "Disetujui" && (
-            <button
-              onClick={() =>
-                handleAction("finish", "Request finished successfully")
-              }
-              className="btn btn-primary me-2"
-            >
-              Selesaikan
-            </button>
+            <>
+              {isLoading ? (
+                <button
+                  onClick={() =>
+                    handleAction("finish", "Request finished successfully")
+                  }
+                  className="btn btn-primary me-2"
+                  disabled
+                >
+                  <span className="spinner-border spinner-border-sm"></span>
+                  Loading...
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    handleAction("finish", "Request finished successfully")
+                  }
+                  className="btn btn-primary me-2"
+                >
+                  Selesaikan
+                </button>
+              )}
+            </>
           )}
 
         {loaderData.status_request === "Selesai" && (
           <a
-            href={`http://localhost:3000/request/${loaderData.kode_request}/download`}
+            href={`${API_BASE_URL}/request/${loaderData.kode_request}/download`}
             target="_blank"
             rel="noreferrer"
             className="btn btn-success"
@@ -226,7 +271,7 @@ export default DetailRiwayatPengajuan;
 
 export async function loader({ req, params }) {
   const kode_request = params.kode_request;
-  const response = await fetch(`http://localhost:3000/request/${kode_request}`);
+  const response = await fetch(`${API_BASE_URL}/request/${kode_request}`);
   const data = await response.json();
   return data.data;
 }

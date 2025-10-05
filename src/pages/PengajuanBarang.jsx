@@ -157,6 +157,8 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../config";
+import Spinner from "../components/Spinners/Spinner";
 
 function FormPengajuanBarang() {
   const [barangOptions, setBarangOptions] = useState([]);
@@ -165,6 +167,7 @@ function FormPengajuanBarang() {
   ]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const navigate = useNavigate();
 
   // Ambil data barang dari API
@@ -172,9 +175,7 @@ function FormPengajuanBarang() {
     const fetchBarang = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `http://localhost:3000/admin/barang/for-request`
-        );
+        const res = await fetch(`${API_BASE_URL}/admin/barang/for-request`);
 
         if (!res.ok) {
           throw new Error("Failed to fetch barang");
@@ -251,15 +252,14 @@ function FormPengajuanBarang() {
     };
 
     try {
-      setLoading(true);
-      const response = await fetch("http://localhost:3000/request", {
+      setSubmitLoading(true);
+      const response = await fetch(`${API_BASE_URL}/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      const res = await response.json();
 
       if (!response.ok) {
         throw new Error("Failed to submit pengajuan");
@@ -285,97 +285,102 @@ function FormPengajuanBarang() {
         allowOutsideClick: false,
       });
     } finally {
-      setLoading(false);
+      setSubmitLoading(false);
     }
   };
 
   return (
     <div className="container-fluid">
       <h2>Form Pengajuan Barang</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">
-            Nama Pemohon
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="exampleFormControlInput1"
-            required
-            name="nama_pemohon"
-            placeholder="Cari dan pilih nama pemohon..."
-          />
-        </div>
-        {barangList.map((item, index) => (
-          <div
-            key={item.id}
-            className="row align-items-center mb-3 border-bottom pb-2"
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Nama Pemohon
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="exampleFormControlInput1"
+              required
+              name="nama_pemohon"
+              placeholder="Cari dan pilih nama pemohon..."
+            />
+          </div>
+          {barangList.map((item, index) => (
+            <div
+              key={item.id}
+              className="row align-items-center mb-3 border-bottom pb-2"
+            >
+              <div className="col-md-7">
+                <label className="form-label">Pilih Barang</label>
+                <Select
+                  options={getAvailableOptions(item.id)}
+                  value={item.selected}
+                  onChange={(selected) => handleSelectChange(item.id, selected)}
+                  placeholder="Cari dan pilih barang..."
+                  isSearchable
+                  required
+                />
+              </div>
+              <div className="col-md-2">
+                <label className="form-label">Jumlah</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  min="1"
+                  max={item.selected ? item.selected.stok : 1}
+                  value={item.jumlah}
+                  onChange={(e) => handleJumlahChange(item.id, e.target.value)}
+                />
+              </div>
+              <div className="col-md-2">
+                <label className="form-label fw-semibold">Stok</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={item.selected ? item.selected.stok : "-"}
+                  disabled
+                />
+              </div>
+              <div className="col-lg-1 d-flex gap-2 mt-4">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => handleRemoveRow(item.id)}
+                  disabled={barangList.length === 1}
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+          {error && (
+            <div class="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <button
+            type="button"
+            className="d-flex btn btn-success"
+            onClick={handleAddRow}
           >
-            <div className="col-md-7">
-              <label className="form-label">Pilih Barang</label>
-              <Select
-                options={getAvailableOptions(item.id)}
-                value={item.selected}
-                onChange={(selected) => handleSelectChange(item.id, selected)}
-                placeholder="Cari dan pilih barang..."
-                isSearchable
-                required
-              />
-            </div>
-            <div className="col-md-2">
-              <label className="form-label">Jumlah</label>
-              <input
-                type="number"
-                className="form-control"
-                min="1"
-                max={item.selected ? item.selected.stok : 1}
-                value={item.jumlah}
-                onChange={(e) => handleJumlahChange(item.id, e.target.value)}
-              />
-            </div>
-            <div className="col-md-2">
-              <label className="form-label fw-semibold">Stok</label>
-              <input
-                type="text"
-                className="form-control"
-                value={item.selected ? item.selected.stok : "-"}
-                disabled
-              />
-            </div>
-            <div className="col-lg-1 d-flex gap-2 mt-4">
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleRemoveRow(item.id)}
-                disabled={barangList.length === 1}
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
-        ))}
-        {error && (
-          <div class="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
-        <button
-          type="button"
-          className="d-flex btn btn-success"
-          onClick={handleAddRow}
-        >
-          + Tambah Barang
-        </button>
-        {loading ? (
-          <button className="btn btn-success disabled">
-            <span className="spinner-border spinner-border-sm"></span>Loading...
+            + Tambah Barang
           </button>
-        ) : (
-          <button type="submit" className="d-flex btn btn-primary mt-3">
-            Submit Pengajuan
-          </button>
-        )}
-      </form>
+          {submitLoading ? (
+            <button className="d-flex btn btn-primary mt-3 disabled">
+              <span className="spinner-border spinner-border-sm"></span>
+              Loading...
+            </button>
+          ) : (
+            <button type="submit" className="d-flex btn btn-primary mt-3">
+              Submit Pengajuan
+            </button>
+          )}
+        </form>
+      )}
     </div>
   );
 }

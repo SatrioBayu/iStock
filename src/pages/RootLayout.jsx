@@ -7,7 +7,7 @@ function RootLayout() {
   return (
     <>
       <Header />
-      <div className="container-md p-4 border">
+      <div className="container-md p-4 border app-container">
         <Outlet />
       </div>
       <Footer />
