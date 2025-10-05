@@ -6,6 +6,7 @@ import RootLayout from "./pages/RootLayout";
 import DetailRiwayatPengajuan from "./pages/DetailRiwayatPengajuan";
 import { loader as detailRiwayatLoader } from "./pages/DetailRiwayatPengajuan";
 import Login from "./pages/Login";
+import DetailBarang from "./pages/DetailBarang";
 import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
@@ -18,11 +19,14 @@ function App() {
           path: "",
           element: <Home />,
         },
-        // {
-        //   element: <PrivateRoute />,
-        //   children: [
-        //   ],
-        // },
+        {
+          element: (
+            <PrivateRoute allowedRoles={["Pengelola BMN", "Kasubbag TURT"]} />
+          ),
+          children: [
+            { path: "detail-barang/:barcode", element: <DetailBarang /> },
+          ],
+        },
         {
           path: "pengajuan-barang",
           element: <PengajuanBarang />,

@@ -72,15 +72,14 @@ function Home() {
         <div className="col-md">
           <h2 className="mb-0">Daftar Barang</h2>
         </div>
-        {/* {user && ( */}
-        <div className="col-md-auto d-flex gap-2">
-          <button onClick={handleExport} className="btn btn-primary">
-            Export Barang Masuk
-          </button>
-          {/* <button className="btn btn-success">Tambah Barang</button> */}
-          <TambahBarangModal onSuccess={fetchData} />
-        </div>
-        {/* )} */}
+        {!loading && (
+          <div className="col-md-auto d-flex gap-2">
+            <button onClick={handleExport} className="btn btn-primary">
+              Export Barang Masuk
+            </button>
+            <TambahBarangModal onSuccess={fetchData} />
+          </div>
+        )}
       </div>
       {loading && <Spinner />}
       <div className="g-4 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
