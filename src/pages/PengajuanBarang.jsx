@@ -1,166 +1,47 @@
-// import { useEffect, useState } from "react";
-// import FormInput from "../components/FormInput";
-
-// function makeUid() {
-//   return Date.now().toString(36) + Math.random().toString(36).slice(2);
-// }
-
-// function PengajuanBarang() {
-//   // State form yang akan dikirim ke backend
-//   const [barangList, setBarangList] = useState([
-//     {
-//       uid: makeUid(),
-//       barang: "",
-//       jumlah: "",
-//       stok: 0,
-//     },
-//   ]);
-//   // Untuk memberi kondisi loading pada tombol submit
-//   // misal menunggu response dari backend
-//   // atau menunggu validasi form
-//   const [submitLoading, setSubmitLoading] = useState(false);
-
-//   // Data barang dari database
-//   const [barangOptions, setBarangOptions] = useState([]);
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   useEffect(() => {
-//     const fetchBarangOptions = async () => {
-//       setIsLoading(true);
-//       try {
-//         const res = await fetch("http://localhost:3000/admin/barang");
-//         const result = await res.json();
-//         console.log(result.data);
-//         setBarangOptions(result.data);
-//       } catch (error) {
-//         console.error("Error fetching barang options:", error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-//     fetchBarangOptions();
-//   }, []);
-
-//   const selectedBarang = barangList
-//     .map((item) => String(item.barang))
-//     .filter((v) => v && v !== "undefined" && v !== "null");
-
-//   const handleAddBarang = () => {
-//     setBarangList((prev) => [
-//       ...prev,
-//       { uid: makeUid(), barang: "", jumlah: "", stok: 0 },
-//     ]);
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const formDataNama = new FormData(e.target);
-//     const dataNama = Object.fromEntries(formDataNama.entries());
-//     const data = {
-//       nama: dataNama,
-//       barang: barangList,
-//     };
-//     console.log(data);
-//     setIsLoading(true);
-//     setTimeout(() => {
-//       setIsLoading(false);
-//     }, 1000);
-//   };
-
-//   const handleChange = (uid, field, value) => {
-//     setBarangList((prev) => {
-//       const newList = prev.map((item) =>
-//         item.uid === uid ? { ...item, [field]: value } : item
-//       );
-
-//       // kalau yang diubah adalah barang -> sync stok dari barangOptions
-//       if (field === "barang") {
-//         const idx = newList.findIndex((it) => it.uid === uid);
-//         const barangTerpilih = barangOptions.find(
-//           (b) => String(b.nama_barang) === value
-//         );
-//         if (idx !== -1) {
-//           newList[idx] = {
-//             ...newList[idx],
-//             stok: barangTerpilih ? barangTerpilih.stok : 0,
-//           };
-//         }
-//       }
-
-//       return newList;
-//     });
-//   };
-
-//   const handleRemove = (uid) => {
-//     setBarangList((prev) => {
-//       if (prev.length === 1) {
-//         return prev;
-//       }
-//       return prev.filter((item) => item.uid !== uid);
-//     });
-//   };
-
-//   return (
-//     <div>
-//       <h2>Pengajuan Barang</h2>
-//       <form onSubmit={handleSubmit}>
-// <div className="mb-3">
-//   <label htmlFor="exampleFormControlInput1" className="form-label">
-//     Nama Pemohon
-//   </label>
-//   <input
-//     type="text"
-//     className="form-control"
-//     id="exampleFormControlInput1"
-//     required
-//     name="nama"
-//   />
-// </div>
-//         {barangList.map((barang) => (
-//           <FormInput
-//             key={barang.uid}
-//             uid={barang.uid}
-//             data={barang}
-//             onChange={handleChange}
-//             barangOptions={barangOptions.filter(
-//               (b) => !selectedBarang.includes(b.nama) || b.nama == barang.barang
-//             )}
-//             onRemove={handleRemove}
-//           />
-//         ))}
-
-//         <div className="d-grid gap-2 col-12 col-sm-2">
-//           <button
-//             type="button"
-//             onClick={handleAddBarang}
-//             className="btn btn-primary"
-//           >
-//             Tambah Barang
-//           </button>
-//           {isLoading ? (
-//             <button className="btn btn-success disabled">
-//               <span className="spinner-border spinner-border-sm"></span>Sedang
-//               Mengajukan...
-//             </button>
-//           ) : (
-//             <button className="btn btn-success">Ajukan</button>
-//           )}
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default PengajuanBarang;
-
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../config";
 import Spinner from "../components/Spinners/Spinner";
 import { NAMA_BAGIAN_OPTIONS, NAMA_PEMOHON_OPTIONS } from "../data_helper";
 import CustomSelect from "../components/CustomSelect/CustomSelect";
+
+const defaultImg = "/iStock.png";
+
+// 🔹 Komponen gambar opsi dropdown & value terpilih
+const ImageOption = ({ src, alt, size = 30 }) => (
+  <img
+    src={src || defaultImg}
+    alt={alt}
+    onError={(e) => (e.target.src = defaultImg)}
+    style={{
+      width: size,
+      height: size,
+      borderRadius: 6,
+      objectFit: "contain",
+      backgroundColor: "#f8f9fa",
+    }}
+  />
+);
+
+const CustomOption = (props) => (
+  <components.Option {...props}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <ImageOption src={props.data.foto} alt={props.data.label} />
+      <span>{props.data.label}</span>
+    </div>
+  </components.Option>
+);
+
+const CustomSingleValue = (props) => (
+  <components.SingleValue {...props}>
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <ImageOption src={props.data.foto} alt={props.data.label} size={24} />
+      <span>{props.data.label}</span>
+    </div>
+  </components.SingleValue>
+);
 
 function FormPengajuanBarang() {
   const [barangOptions, setBarangOptions] = useState([]);
@@ -174,101 +55,94 @@ function FormPengajuanBarang() {
   const [selectBagian, setSelectBagian] = useState(null);
   const navigate = useNavigate();
 
-  // Ambil data barang dari API
+  // 🔹 Ambil data barang dari API
   useEffect(() => {
-    const fetchBarang = async () => {
+    (async () => {
       try {
         setLoading(true);
         const res = await fetch(`${API_BASE_URL}/admin/barang/for-request`);
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch barang");
-        }
+        if (!res.ok) throw new Error("Gagal memuat data barang");
 
         const result = await res.json();
         const options = result.data.map((item) => ({
           value: item.barcode,
-          label: `${item.nama_barang}`,
+          label: item.nama_barang,
           stok: item.stok,
           satuan: item.satuan,
+          foto: item.foto,
         }));
         setBarangOptions(options);
       } catch (err) {
+        console.error(err);
         setError(err.message);
-        console.error("Error fetching barang:", err);
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchBarang();
+    })();
   }, []);
 
-  // Filter agar barang yang sudah dipilih tidak muncul di select lain
+  // 🔹 Filter agar barang tidak ganda
   const getAvailableOptions = (currentId) => {
     const selectedValues = barangList
       .filter((b) => b.selected && b.id !== currentId)
       .map((b) => b.selected.value);
-
     return barangOptions.filter((opt) => !selectedValues.includes(opt.value));
   };
 
-  const handleSelectChange = (id, selectedOption) => {
+  // 🔹 Handle perubahan select & jumlah
+  const handleSelectChange = (id, selectedOption) =>
     setBarangList((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, selected: selectedOption } : item
       )
     );
-  };
 
-  const handleJumlahChange = (id, jumlah) => {
+  const handleJumlahChange = (id, jumlah) =>
     setBarangList((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, jumlah } : item))
+      prev.map((item) =>
+        item.id === id ? { ...item, jumlah: Math.max(1, jumlah) } : item
+      )
     );
-  };
 
-  const handleAddRow = () => {
+  // 🔹 Tambah dan hapus baris
+  const handleAddRow = () =>
     setBarangList((prev) => [
       ...prev,
       { id: Date.now(), selected: null, jumlah: 1 },
     ]);
-  };
 
-  const handleRemoveRow = (id) => {
-    if (barangList.length === 1) return; // minimal 1 baris
+  const handleRemoveRow = (id) =>
+    barangList.length > 1 &&
     setBarangList((prev) => prev.filter((item) => item.id !== id));
-  };
 
+  // 🔹 Submit pengajuan
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = barangList.map((item) => ({
-      barcode: item.selected?.value,
-      nama_barang: item.selected?.label,
-      jumlah: parseInt(item.jumlah),
-    }));
+    const payload = barangList
+      .filter((b) => b.selected)
+      .map(({ selected, jumlah }) => ({
+        barcode: selected.value,
+        nama_barang: selected.label,
+        jumlah: parseInt(jumlah, 10),
+      }));
 
-    // fetch ke backend di sini
     const formDataNama = new FormData(e.target);
-    const dataNama = Object.fromEntries(formDataNama.entries());
     const data = {
-      nama_pemohon: dataNama.nama_pemohon,
-      nama_bagian: dataNama.nama_bagian,
+      nama_pemohon: formDataNama.get("nama_pemohon"),
+      nama_bagian: formDataNama.get("nama_bagian"),
       barang: payload,
     };
 
     try {
       setSubmitLoading(true);
-      const response = await fetch(`${API_BASE_URL}/request`, {
+      const res = await fetch(`${API_BASE_URL}/request`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit pengajuan");
-      }
+      if (!res.ok) throw new Error("Gagal mengirim pengajuan");
+
       Swal.fire({
         icon: "success",
         title: "Pengajuan berhasil dikirim!",
@@ -276,20 +150,16 @@ function FormPengajuanBarang() {
         timer: 3000,
         showConfirmButton: false,
         timerProgressBar: true,
-        allowEscapeKey: false,
         allowOutsideClick: false,
-        didClose: () => {
-          navigate("/riwayat-pengajuan");
-        },
+        didClose: () => navigate("/riwayat-pengajuan"),
       });
-    } catch (error) {
-      setError(error.message);
-      console.error("Error submitting pengajuan:", error);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
       Swal.fire({
         icon: "error",
         title: "Gagal Mengajukan",
-        text: error.message,
-        allowOutsideClick: false,
+        text: err.message,
       });
     } finally {
       setSubmitLoading(false);
@@ -303,6 +173,7 @@ function FormPengajuanBarang() {
         <Spinner />
       ) : (
         <form onSubmit={handleSubmit}>
+          {/* Dropdown Nama Pemohon & Bagian */}
           <CustomSelect
             options={NAMA_PEMOHON_OPTIONS}
             value={selectNama}
@@ -320,20 +191,8 @@ function FormPengajuanBarang() {
             labelValue="nama_bagian"
           />
 
-          {/* <div className="mb-3">
-            <label htmlFor="exampleFormControlInput2" className="form-label">
-              Nama Bagian
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput2"
-              required
-              name="nama_bagian"
-              placeholder="Cari dan pilih nama bagian..."
-            />
-          </div> */}
-          {barangList.map((item, index) => (
+          {/* Daftar Barang */}
+          {barangList.map((item) => (
             <div
               key={item.id}
               className="row align-items-center mb-3 border-bottom pb-2"
@@ -347,6 +206,10 @@ function FormPengajuanBarang() {
                   placeholder="Cari dan pilih barang..."
                   isSearchable
                   required
+                  components={{
+                    Option: CustomOption,
+                    SingleValue: CustomSingleValue,
+                  }}
                 />
               </div>
               <div className="col-md-2">
@@ -355,9 +218,11 @@ function FormPengajuanBarang() {
                   type="number"
                   className="form-control"
                   min="1"
-                  max={item.selected ? item.selected.stok : 1}
+                  max={item.selected?.stok || 1}
                   value={item.jumlah}
-                  onChange={(e) => handleJumlahChange(item.id, e.target.value)}
+                  onChange={(e) =>
+                    handleJumlahChange(item.id, e.target.valueAsNumber)
+                  }
                 />
               </div>
               <div className="col-md-2">
@@ -365,7 +230,7 @@ function FormPengajuanBarang() {
                 <input
                   type="text"
                   className="form-control"
-                  value={item.selected ? item.selected.stok : "-"}
+                  value={item.selected?.stok ?? "-"}
                   disabled
                 />
               </div>
@@ -381,11 +246,15 @@ function FormPengajuanBarang() {
               </div>
             </div>
           ))}
+
+          {/* Error */}
           {error && (
-            <div class="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
+
+          {/* Tambah Barang */}
           <button
             type="button"
             className="d-flex btn btn-success"
@@ -393,16 +262,22 @@ function FormPengajuanBarang() {
           >
             + Tambah Barang
           </button>
-          {submitLoading ? (
-            <button className="d-flex btn btn-primary mt-3 disabled">
-              <span className="spinner-border spinner-border-sm"></span>
-              Loading...
-            </button>
-          ) : (
-            <button type="submit" className="d-flex btn btn-primary mt-3">
-              Submit Pengajuan
-            </button>
-          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            className="d-flex btn btn-primary mt-3"
+            disabled={submitLoading}
+          >
+            {submitLoading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Mengirim...
+              </>
+            ) : (
+              "Submit Pengajuan"
+            )}
+          </button>
         </form>
       )}
     </div>

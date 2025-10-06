@@ -96,6 +96,7 @@ function Home() {
                     nama_barang={item.nama_barang}
                     stok={item.stok}
                     barcode={item.barcode}
+                    foto={item.foto}
                   />
                 ))}
             </div>

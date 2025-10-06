@@ -43,7 +43,9 @@ export default function Login() {
             <img src="iStock.png" className={`${styles["img-logo"]}`} alt="" />
           </div>
           <div className="col-md-10">
-            <h5 className="mb-0 fw-bold">Manajemen Gudang PT TUN Makassar</h5>
+            <h5 className="mb-0 fw-bold">
+              Manajemen Persediaan PT TUN Makassar
+            </h5>
           </div>
         </div>
         <p className={`my-2 ${styles["secondary"]}`}>Login Admin</p>

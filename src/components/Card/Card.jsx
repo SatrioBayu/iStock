@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
 
-function Card({ nama_barang, stok, barcode }) {
+function Card({ nama_barang, stok, barcode, foto }) {
   const { user } = useContext(AuthContext);
 
   return (
@@ -14,7 +14,16 @@ function Card({ nama_barang, stok, barcode }) {
           to={`/detail-barang/${barcode}`}
         >
           <div className={`card h-100 ${styles["hover-card"]}`}>
-            {/* <img src="./iStock.png" className="card-img-top" alt="..." /> */}
+            <img
+              src={foto || "/iStock.png"}
+              className="card-img-top img-fluid"
+              alt="Foto Barang"
+              style={{
+                height: "150px", // Tentukan tinggi gambar yang seragam
+                width: "100%", // Membuat gambar lebar penuh sesuai kontainer
+                objectFit: "cover",
+              }}
+            />
             <div className="card-body">
               <h5 className="card-title">{nama_barang}</h5>
             </div>
@@ -25,7 +34,16 @@ function Card({ nama_barang, stok, barcode }) {
         </Link>
       ) : (
         <div className={`card h-100 ${styles["hover-card"]}`}>
-          {/* <img src="./iStock.png" className="card-img-top" alt="..." /> */}
+          <img
+            src={foto || "/iStock.png"}
+            className="card-img-top img-fluid"
+            alt="Foto Barang"
+            style={{
+              height: "150px", // Tentukan tinggi gambar yang seragam
+              width: "100%", // Membuat gambar lebar penuh sesuai kontainer
+              objectFit: "cover",
+            }}
+          />
           <div className="card-body">
             <h5 className="card-title">{nama_barang}</h5>
           </div>
