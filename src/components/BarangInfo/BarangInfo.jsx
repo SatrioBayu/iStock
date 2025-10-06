@@ -56,10 +56,13 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../../config";
+import { useParams, useNavigate } from "react-router-dom";
 
 const BarangInfo = ({ barang, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(barang);
+  const [formData, setFormData] = useState({ ...barang, newBarcode: "" });
+  const { barcode } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFormData(barang);
@@ -77,23 +80,23 @@ const BarangInfo = ({ barang, onUpdate }) => {
   // Simpan perubahan ke backend
   const handleSave = async () => {
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/admin/barang/${formData.barcode}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      if (!res.ok) throw new Error("Gagal memperbarui data");
+      const res = await fetch(`${API_BASE_URL}/admin/barang/${barcode}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       const updated = await res.json();
-      onUpdate(updated);
+      console.log(updated);
+
+      if (!res.ok) throw new Error(updated.message || "Gagal memperbarui data");
+
+      onUpdate(updated.data);
       setIsEditing(false);
+      navigate(`/detail-barang/${updated.data.barcode}`);
 
       // tampilkan notifikasi sukses
       Swal.fire({
@@ -108,7 +111,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: "Terjadi kesalahan saat menyimpan perubahan.",
+        text: error,
       });
     }
   };
@@ -153,11 +156,12 @@ const BarangInfo = ({ barang, onUpdate }) => {
             <label className="form-label">Barcode</label>
             <input
               type="text"
-              name="kode_barang"
+              name="barcode"
               className="form-control"
-              defaultValue={formData.barcode}
+              value={formData.barcode || ""}
               onChange={handleChange}
               disabled={!isEditing}
+              required
             />
           </div>
 
@@ -167,9 +171,10 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="nama_barang"
               className="form-control"
-              value={formData.nama_barang}
+              value={formData.nama_barang || ""}
               onChange={handleChange}
               disabled={!isEditing}
+              required
             />
           </div>
 
@@ -179,9 +184,10 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="number"
               name="stok"
               className="form-control"
-              value={formData.stok}
+              value={formData.stok || ""}
               onChange={handleChange}
               disabled={!isEditing}
+              required
             />
           </div>
 
@@ -194,6 +200,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               value={formData.satuan || ""}
               onChange={handleChange}
               disabled={!isEditing}
+              required
             />
           </div>
         </div>

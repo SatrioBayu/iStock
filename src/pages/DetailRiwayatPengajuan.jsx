@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { AuthContext } from "../store/auth-context";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../config";
+import BackButton from "../components/BackButton/BackButton";
 
 function DetailRiwayatPengajuan() {
   const loaderData = useLoaderData();
@@ -94,6 +95,7 @@ function DetailRiwayatPengajuan() {
 
   return (
     <div className="container-fluid">
+      <BackButton className="mb-4" />
       <h2>Detail Pengajuan {loaderData.kode_request}</h2>
       <div className="row row-cols-8">
         <div className="col-12 col-sm-10 mb-3">

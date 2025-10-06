@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const BackButton = ({ label = "Kembali", className = "" }) => {
+const BackButton = ({ label = "Kembali", className = "", destination }) => {
   const navigate = useNavigate();
 
   return (
     <button
       type="button"
-      onClick={() => navigate(-1)}
+      onClick={() => navigate(destination || -1)}
       className={`btn btn-outline-secondary d-inline-flex align-items-center ${className}`}
     >
       {label}

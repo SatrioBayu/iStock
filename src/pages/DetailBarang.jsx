@@ -66,7 +66,7 @@ const DetailBarang = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      const res = await fetch(
+      const response = await fetch(
         `${API_BASE_URL}/admin/barang/transaksi/add/${formData.barcode}`,
         {
           method: "POST",
@@ -78,9 +78,10 @@ const DetailBarang = () => {
         }
       );
 
-      if (!res.ok) throw new Error("Gagal menambahkan transaksi");
+      const res = await response.json();
 
-      const newTransaksi = await res.json();
+      if (!response.ok)
+        throw new Error(res.message || "Gagal menambahkan transaksi");
 
       // Update state agar langsung tampil di tabel
       fetchData();
@@ -98,7 +99,7 @@ const DetailBarang = () => {
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: "Terjadi kesalahan saat menambahkan transaksi.",
+        text: err || "Terjadi kesalahan saat menambahkan transaksi.",
       });
     }
   };

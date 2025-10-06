@@ -38,7 +38,11 @@ function RiwayatPengajuan() {
         <Spinner />
       ) : (
         <>
-          <button className="btn btn-primary">Export Pengajuan</button>
+          {/* To be implement */}
+          <button className="btn btn-primary" disabled>
+            Export Pengajuan
+          </button>
+          {/* To be implement */}
           <RiwayatTable
             title="Menunggu Persetujuan"
             data={menunggu}
