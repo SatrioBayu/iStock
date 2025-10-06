@@ -159,6 +159,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../config";
 import Spinner from "../components/Spinners/Spinner";
+import { NAMA_BAGIAN_OPTIONS, NAMA_PEMOHON_OPTIONS } from "../data_helper";
+import CustomSelect from "../components/CustomSelect/CustomSelect";
 
 function FormPengajuanBarang() {
   const [barangOptions, setBarangOptions] = useState([]);
@@ -168,6 +170,8 @@ function FormPengajuanBarang() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [selectNama, setSelectNama] = useState(null);
+  const [selectBagian, setSelectBagian] = useState(null);
   const navigate = useNavigate();
 
   // Ambil data barang dari API
@@ -272,6 +276,8 @@ function FormPengajuanBarang() {
         timer: 3000,
         showConfirmButton: false,
         timerProgressBar: true,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
         didClose: () => {
           navigate("/riwayat-pengajuan");
         },
@@ -297,20 +303,24 @@ function FormPengajuanBarang() {
         <Spinner />
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="exampleFormControlInput1" className="form-label">
-              Nama Pemohon
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput1"
-              required
-              name="nama_pemohon"
-              placeholder="Cari dan pilih nama pemohon..."
-            />
-          </div>
-          <div className="mb-3">
+          <CustomSelect
+            options={NAMA_PEMOHON_OPTIONS}
+            value={selectNama}
+            onChange={setSelectNama}
+            placeholder="Cari dan pilih nama"
+            label="Nama Pemohon"
+            labelValue="nama_pemohon"
+          />
+          <CustomSelect
+            options={NAMA_BAGIAN_OPTIONS}
+            value={selectBagian}
+            onChange={setSelectBagian}
+            placeholder="Cari dan pilih bagian"
+            label="Nama Bagian"
+            labelValue="nama_bagian"
+          />
+
+          {/* <div className="mb-3">
             <label htmlFor="exampleFormControlInput2" className="form-label">
               Nama Bagian
             </label>
@@ -322,7 +332,7 @@ function FormPengajuanBarang() {
               name="nama_bagian"
               placeholder="Cari dan pilih nama bagian..."
             />
-          </div>
+          </div> */}
           {barangList.map((item, index) => (
             <div
               key={item.id}

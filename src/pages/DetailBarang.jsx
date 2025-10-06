@@ -67,7 +67,7 @@ const DetailBarang = () => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/admin/barang/transaksi/add/${formData.barcode}`,
+        `${API_BASE_URL}/admin/barang/transaksi/add/${barcode}`,
         {
           method: "POST",
           headers: {
@@ -199,7 +199,7 @@ const DetailBarang = () => {
 
   return (
     <div className="container py-4">
-      <BackButton className="mb-4" />
+      <BackButton className="mb-4" destination="/" />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="fw-bold text-primary">Detail Barang</h5>
         <button className="btn btn-danger btn-sm" disabled>

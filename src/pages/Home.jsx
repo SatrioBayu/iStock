@@ -22,8 +22,6 @@ function Home() {
       if (!response.ok) {
         throw new Error("Error fetching data");
       }
-      console.log(response);
-
       setListBarang(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);

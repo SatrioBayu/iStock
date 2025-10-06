@@ -90,7 +90,6 @@ const BarangInfo = ({ barang, onUpdate }) => {
       });
 
       const updated = await res.json();
-      console.log(updated);
 
       if (!res.ok) throw new Error(updated.message || "Gagal memperbarui data");
 
@@ -195,7 +194,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
             <label className="form-label">Satuan</label>
             <input
               type="text"
-              name="kategori"
+              name="satuan"
               className="form-control"
               value={formData.satuan || ""}
               onChange={handleChange}

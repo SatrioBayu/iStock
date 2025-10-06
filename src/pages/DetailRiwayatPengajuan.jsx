@@ -70,7 +70,9 @@ function DetailRiwayatPengajuan() {
       case "Disetujui":
         return (
           <>
-            <td className="fw-bold text-success">Disetujui</td>
+            <td className="fw-bold text-success">
+              Disetujui {format(tanggal_disetujui)}
+            </td>
             <td>Menunggu Tindak Lanjut...</td>
           </>
         );
@@ -111,6 +113,21 @@ function DetailRiwayatPengajuan() {
           />
         </div>
       </div>
+      <div className="row row-cols-8">
+        <div className="col-12 col-sm-10 mb-3">
+          <label htmlFor="exampleFormControlInput3" className="form-label">
+            Nama Bagian
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="exampleFormControlInput3"
+            value={loaderData.nama_bagian}
+            disabled
+          />
+        </div>
+      </div>
+      <div className="row"></div>
       {loaderData.Request_Details.map((detail) => (
         <div key={detail.id} className="row">
           <div className="col-sm-8 col-md-9 mb-3">

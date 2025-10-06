@@ -17,7 +17,7 @@ function RiwayatTable({ title, data }) {
   });
 
   return (
-    <div className="border rounded p-3 my-3">
+    <div className="border rounded p-3 my-3 table-responsive">
       <h5 className="mb-0">Riwayat Pengajuan Barang yang {title}</h5>
       <div className="my-3 gy-2 row row-cols-1 row-cols-sm-3">
         <div className="col">
@@ -35,7 +35,6 @@ function RiwayatTable({ title, data }) {
           <tr className="table-active">
             <th>Nomor Pengajuan</th>
             <th>Nama Pemohon</th>
-            <th>Nama Bagian</th>
             <th>Tanggal Pengajuan</th>
             <th>Status</th>
           </tr>
@@ -46,7 +45,6 @@ function RiwayatTable({ title, data }) {
               <tr key={data.id}>
                 <td>{data.kode_request}</td>
                 <td>{data.nama_pemohon}</td>
-                <td>{data.nama_bagian}</td>
                 <td>
                   {dayjs(data.tanggal_request).format("DD MMMM YYYY HH:mm:ss")}
                 </td>
@@ -73,7 +71,7 @@ function RiwayatTable({ title, data }) {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan="4" className="text-center">
                 <h6>Data pengajuan tidak ditemukan</h6>
               </td>
             </tr>
