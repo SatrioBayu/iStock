@@ -19,6 +19,11 @@ function Home() {
     try {
       const response = await fetch(`${API_BASE_URL}/admin/barang`);
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Error fetching data");
+      }
+      console.log(response);
+
       setListBarang(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -12,6 +12,9 @@ function RiwayatPengajuan() {
       try {
         const response = await fetch(`${API_BASE_URL}/request`);
         const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch data");
+        }
         setRiwayat(data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
