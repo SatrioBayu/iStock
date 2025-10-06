@@ -35,6 +35,7 @@ function RiwayatTable({ title, data }) {
           <tr className="table-active">
             <th>Nomor Pengajuan</th>
             <th>Nama Pemohon</th>
+            <th>Nama Bagian</th>
             <th>Tanggal Pengajuan</th>
             <th>Status</th>
           </tr>
@@ -45,6 +46,7 @@ function RiwayatTable({ title, data }) {
               <tr key={data.id}>
                 <td>{data.kode_request}</td>
                 <td>{data.nama_pemohon}</td>
+                <td>{data.nama_bagian}</td>
                 <td>
                   {dayjs(data.tanggal_request).format("DD MMMM YYYY HH:mm:ss")}
                 </td>
@@ -71,7 +73,7 @@ function RiwayatTable({ title, data }) {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center">
+              <td colSpan="5" className="text-center">
                 <h6>Data pengajuan tidak ditemukan</h6>
               </td>
             </tr>

@@ -19,6 +19,10 @@ function App() {
           path: "",
           element: <Home />,
         },
+        // {
+        //   path: "detail-barang/:barcode",
+        //   element: <DetailBarang />,
+        // },
         {
           element: (
             <PrivateRoute allowedRoles={["Pengelola BMN", "Kasubbag TURT"]} />

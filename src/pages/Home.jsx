@@ -85,23 +85,28 @@ function Home() {
           </div>
         )}
       </div>
-      {loading && <Spinner />}
-      {listBarang.length > 0 ? (
-        <div className="g-4 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-          {!loading &&
-            listBarang.map((item) => (
-              <Card
-                key={item.barcode}
-                nama_barang={item.nama_barang}
-                stok={item.stok}
-                barcode={item.barcode}
-              />
-            ))}
-        </div>
+      {loading ? (
+        <Spinner />
       ) : (
-        <div className="container text-center py-5">
-          <h4 className="mt-2">Tidak ada barang untuk saat ini</h4>
-        </div>
+        <>
+          {listBarang.length > 0 ? (
+            <div className="g-4 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+              {!loading &&
+                listBarang.map((item) => (
+                  <Card
+                    key={item.barcode}
+                    nama_barang={item.nama_barang}
+                    stok={item.stok}
+                    barcode={item.barcode}
+                  />
+                ))}
+            </div>
+          ) : (
+            <div className="container text-center py-5">
+              <h4 className="mt-2">Tidak ada barang untuk saat ini</h4>
+            </div>
+          )}
+        </>
       )}
     </>
   );

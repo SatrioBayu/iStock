@@ -248,6 +248,7 @@ function FormPengajuanBarang() {
     const dataNama = Object.fromEntries(formDataNama.entries());
     const data = {
       nama_pemohon: dataNama.nama_pemohon,
+      nama_bagian: dataNama.nama_bagian,
       barang: payload,
     };
 
@@ -307,6 +308,19 @@ function FormPengajuanBarang() {
               required
               name="nama_pemohon"
               placeholder="Cari dan pilih nama pemohon..."
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput2" className="form-label">
+              Nama Bagian
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="exampleFormControlInput2"
+              required
+              name="nama_bagian"
+              placeholder="Cari dan pilih nama bagian..."
             />
           </div>
           {barangList.map((item, index) => (
