@@ -33,12 +33,11 @@ function Home() {
         const response = await fetch(`${API_BASE_URL}/admin/barang/transaksi`, {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
           },
         });
         if (!response.ok) {
-          throw new Error("Failed to download file.");
+          throw new Error(response.statusText);
         }
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);

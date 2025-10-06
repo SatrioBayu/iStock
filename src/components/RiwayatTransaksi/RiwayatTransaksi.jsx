@@ -1,6 +1,6 @@
 import React from "react";
 
-const RiwayatTransaksi = ({ riwayat, onTambahClick }) => (
+const RiwayatTransaksi = ({ riwayat, onTambahClick, onDelete }) => (
   <>
     <div className="d-flex justify-content-between align-items-center mb-2">
       <h6 className="fw-semibold">Riwayat Transaksi</h6>
@@ -18,6 +18,7 @@ const RiwayatTransaksi = ({ riwayat, onTambahClick }) => (
             <th>Harga Satuan</th>
             <th>Jumlah Dibeli</th>
             <th>Harga Total</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -29,6 +30,14 @@ const RiwayatTransaksi = ({ riwayat, onTambahClick }) => (
                 <td>{r.harga_satuan}</td>
                 <td>{r.jumlah_dibeli}</td>
                 <td>{r.harga_total}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => onDelete(r.id)}
+                  >
+                    Hapus
+                  </button>
+                </td>
               </tr>
             ))
           ) : (

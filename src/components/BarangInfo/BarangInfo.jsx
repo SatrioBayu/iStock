@@ -53,13 +53,17 @@
 
 // export default BarangInfo;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../../config";
 
 const BarangInfo = ({ barang, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(barang);
+
+  useEffect(() => {
+    setFormData(barang);
+  }, [barang]);
 
   // Handle input perubahan
   const handleChange = (e) => {
@@ -163,7 +167,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="nama_barang"
               className="form-control"
-              defaultValue={formData.nama_barang}
+              value={formData.nama_barang}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -175,7 +179,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="number"
               name="stok"
               className="form-control"
-              defaultValue={formData.stok}
+              value={formData.stok}
               onChange={handleChange}
               disabled={!isEditing}
             />
@@ -187,7 +191,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
               type="text"
               name="kategori"
               className="form-control"
-              defaultValue={formData.satuan || ""}
+              value={formData.satuan || ""}
               onChange={handleChange}
               disabled={!isEditing}
             />

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
-const TambahTransaksiModal = ({ show, onClose, onSubmit }) => {
+const TambahTransaksiModal = ({ show, onClose, onSubmit, barcode }) => {
   const [formData, setFormData] = useState({
+    barcode: barcode,
     nama_toko: "",
     tanggal_transaksi: "",
     harga_satuan: "",
@@ -13,7 +14,14 @@ const TambahTransaksiModal = ({ show, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     const total = formData.harga_satuan * formData.jumlah_dibeli;
-    onSubmit({ ...formData, harga_total: total });
+    const formattedDate = new Date(
+      `${formData.tanggal_transaksi}T${new Date().toTimeString().split(" ")[0]}`
+    ).toISOString();
+    onSubmit({
+      ...formData,
+      harga_total: total,
+      tanggal_transaksi: formattedDate,
+    });
     onClose();
   };
 
