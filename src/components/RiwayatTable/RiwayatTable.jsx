@@ -2,19 +2,23 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
-function RiwayatTable({ title, data }) {
+function RiwayatTable({ title, data, loading }) {
   const [pencarian, setPencarian] = useState("");
-  const filteredData = data.filter((item) => {
-    return (
-      item.kode_request.toLowerCase().includes(pencarian) ||
-      item.nama_pemohon.toLowerCase().includes(pencarian) ||
-      dayjs(item.tanggal_request)
-        .format("DD MMMM YYYY HH:mm")
-        .toLowerCase()
-        .includes(pencarian) ||
-      item.status_request.toLowerCase().includes(pencarian)
-    );
-  });
+
+  const filteredData = !loading
+    ? data.filter((item) => {
+        const query = pencarian.toLowerCase();
+        return (
+          item.kode_request.toLowerCase().includes(query) ||
+          item.nama_pemohon.toLowerCase().includes(query) ||
+          dayjs(item.tanggal_request)
+            .format("DD MMMM YYYY HH:mm")
+            .toLowerCase()
+            .includes(query) ||
+          item.status_request.toLowerCase().includes(query)
+        );
+      })
+    : [];
 
   return (
     <div className="border rounded p-3 my-3 table-responsive">
@@ -30,54 +34,66 @@ function RiwayatTable({ title, data }) {
           />
         </div>
       </div>
-      <table className="table table-striped table-hover align-middle">
-        <thead>
-          <tr className="table-active">
-            <th>Nomor Pengajuan</th>
-            <th>Nama Pemohon</th>
-            <th>Tanggal Pengajuan</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((data) => (
-              <tr key={data.id}>
-                <td>{data.kode_request}</td>
-                <td>{data.nama_pemohon}</td>
-                <td>
-                  {dayjs(data.tanggal_request).format("DD MMMM YYYY HH:mm:ss")}
-                </td>
-                <td>
-                  <Link to={data.kode_request}>
-                    <button
-                      className={`btn ${
-                        data.status_request === "Menunggu Persetujuan"
-                          ? "btn-warning"
-                          : data.status_request === "Ditolak"
-                          ? "btn-danger"
-                          : data.status_request === "Disetujui"
-                          ? "btn-success"
-                          : data.status_request === "Selesai"
-                          ? "btn-primary"
-                          : undefined
-                      }`}
-                    >
-                      {data.status_request}
-                    </button>
-                  </Link>
+      {loading ? (
+        // ✅ Spinner loading tengah halaman
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div className="spinner-border text-primary me-2" role="status" />
+          <span className="text-muted">Memuat data riwayat...</span>
+        </div>
+      ) : (
+        <table className="table table-striped table-hover align-middle">
+          <thead>
+            <tr className="table-active">
+              <th>Nomor Pengajuan</th>
+              <th>Nama Pemohon</th>
+              <th>Tanggal Pengajuan</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length > 0 ? (
+              filteredData.map((data) => (
+                <tr key={data.id}>
+                  <td>{data.kode_request}</td>
+                  <td>{data.nama_pemohon}</td>
+                  <td>
+                    {dayjs(data.tanggal_request).format(
+                      "DD MMMM YYYY HH:mm:ss"
+                    )}
+                  </td>
+                  <td>
+                    <Link to={data.kode_request}>
+                      <button
+                        className={`btn ${
+                          data.status_request === "Menunggu Persetujuan"
+                            ? "btn-warning"
+                            : data.status_request === "Ditolak"
+                            ? "btn-danger"
+                            : data.status_request === "Disetujui"
+                            ? "btn-success"
+                            : data.status_request === "Selesai"
+                            ? "btn-primary"
+                            : "btn-secondary"
+                        }`}
+                      >
+                        {data.status_request}
+                      </button>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center py-4">
+                  <h6 className="text-muted mb-0">
+                    Data pengajuan tidak ditemukan
+                  </h6>
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center">
-                <h6>Data pengajuan tidak ditemukan</h6>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

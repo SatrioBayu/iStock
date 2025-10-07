@@ -141,7 +141,10 @@ function FormPengajuanBarang() {
         body: JSON.stringify(data),
       });
 
-      if (!res.ok) throw new Error("Gagal mengirim pengajuan");
+      const response = await res.json();
+      if (!res.ok) throw new Error(response.message);
+
+      setError(null);
 
       Swal.fire({
         icon: "success",

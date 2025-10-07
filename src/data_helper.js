@@ -129,4 +129,12 @@ export const NAMA_BAGIAN_OPTIONS = [
     value: "Hakim",
     label: "Hakim",
   },
+  {
+    value: "Ketua",
+    label: "Ketua",
+  },
+  {
+    value: "Wakil Ketua",
+    label: "Wakil Ketua",
+  },
 ];

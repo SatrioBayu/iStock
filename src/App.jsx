@@ -8,6 +8,7 @@ import { loader as detailRiwayatLoader } from "./pages/DetailRiwayatPengajuan";
 import Login from "./pages/Login";
 import DetailBarang from "./pages/DetailBarang";
 import PrivateRoute from "./pages/PrivateRoute";
+import RiwayatPengajuanStatus from "./pages/RiwayatPengajuanStatus";
 
 function App() {
   const router = createBrowserRouter([
@@ -37,13 +38,12 @@ function App() {
         },
         {
           path: "riwayat-pengajuan",
+          element: <RiwayatPengajuan />,
           children: [
+            { path: ":status", element: <RiwayatPengajuanStatus /> },
+            // ✅ Detail berdasarkan status & kode_request
             {
-              path: "",
-              element: <RiwayatPengajuan />,
-            },
-            {
-              path: ":kode_request",
+              path: ":status/:kode_request",
               element: <DetailRiwayatPengajuan />,
               loader: detailRiwayatLoader,
             },
