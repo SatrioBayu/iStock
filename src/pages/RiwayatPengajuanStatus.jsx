@@ -28,9 +28,8 @@ function RiwayatPengajuanStatus() {
 
   // Map dari URL status ke label & nilai yang sesuai di database
   const STATUS_MAP = {
-    disetujui: "Disetujui",
-    ditolak: "Ditolak",
     menunggu: "Menunggu Persetujuan",
+    "dalam-proses": "Dalam Proses",
     selesai: "Selesai",
   };
 

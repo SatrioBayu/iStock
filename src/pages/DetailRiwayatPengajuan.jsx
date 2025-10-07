@@ -11,12 +11,80 @@ function DetailRiwayatPengajuan() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [decisions, setDecisions] = useState({});
+  const [catatanPenyetuju, setCatatanPenyetuju] = useState("");
 
-  const handleAction = async (endpoint, successText) => {
+  const formatDate = (date) =>
+    date ? dayjs(date).format("DD MMM YYYY HH:mm") : "-";
+
+  const handleDecision = (id, status) => {
+    setDecisions((prev) => ({ ...prev, [id]: status }));
+  };
+
+  const handleSubmitApproval = async () => {
+    const allDetailIds = loaderData.Request_Details.map((d) => d.id);
+    const approvedItems = Object.keys(decisions)
+      .filter((id) => decisions[id] === "Disetujui")
+      .map(Number);
+    const rejectedItems = Object.keys(decisions)
+      .filter((id) => decisions[id] === "Ditolak")
+      .map(Number);
+
+    const undecided = allDetailIds.filter(
+      (id) => !approvedItems.includes(id) && !rejectedItems.includes(id)
+    );
+    if (undecided.length > 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Peringatan",
+        text: "Semua barang harus disetujui atau ditolak sebelum dikirim.",
+      });
+    }
+
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${API_BASE_URL}/request/${loaderData.kode_request}/${endpoint}`,
+        `${API_BASE_URL}/request/${loaderData.kode_request}/approval`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+          body: JSON.stringify({
+            approvedItems,
+            rejectedItems,
+            catatan_penyetuju: catatanPenyetuju,
+          }),
+        }
+      );
+
+      const res = await response.json();
+      if (!response.ok)
+        throw new Error(res.message || "Gagal menyimpan perubahan");
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Persetujuan berhasil dikirim.",
+        didClose: () => navigate("/riwayat-pengajuan"),
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFinish = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `${API_BASE_URL}/request/${loaderData.kode_request}/finish`,
         {
           method: "PATCH",
           headers: {
@@ -26,72 +94,18 @@ function DetailRiwayatPengajuan() {
         }
       );
       const res = await response.json();
-      if (!response.ok) {
-        throw new Error(res.errors[0].message || "Failed to approve request");
-      }
+      if (!response.ok)
+        throw new Error(res.message || "Gagal menyelesaikan request");
       Swal.fire({
         icon: "success",
-        title: "Success",
-        text: successText,
-        allowOutsideClick: false,
-        didClose: () => {
-          navigate("/riwayat-pengajuan");
-        },
+        title: "Berhasil",
+        text: "Request berhasil diselesaikan.",
+        didClose: () => navigate("/riwayat-pengajuan"),
       });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.message || "Failed to finish request",
-        allowOutsideClick: false,
-      });
+    } catch (err) {
+      Swal.fire({ icon: "error", title: "Error", text: err.message });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const renderStatus = () => {
-    const { status_request, tanggal_disetujui, tanggal_selesai } = loaderData;
-
-    const format = (date) => dayjs(date).format("DD MMM YYYY HH:mm:ss");
-
-    switch (status_request) {
-      case "Selesai":
-        return (
-          <>
-            <td className="fw-bold text-success">
-              Disetujui {format(tanggal_disetujui)}
-            </td>
-            <td className="fw-bold text-success">
-              Ditindaklanjut {format(tanggal_selesai)}
-            </td>
-          </>
-        );
-      case "Disetujui":
-        return (
-          <>
-            <td className="fw-bold text-success">
-              Disetujui {format(tanggal_disetujui)}
-            </td>
-            <td>Menunggu Tindak Lanjut...</td>
-          </>
-        );
-      case "Menunggu Persetujuan":
-        return (
-          <>
-            <td>Menunggu...</td>
-            <td>Menunggu...</td>
-          </>
-        );
-      case "Ditolak":
-        return (
-          <>
-            <td className="text-danger fw-bold">Ditolak</td>
-            <td className="text-danger fw-bold">Ditolak</td>
-          </>
-        );
-      default:
-        return null;
     }
   };
 
@@ -99,153 +113,186 @@ function DetailRiwayatPengajuan() {
     <div className="container-fluid">
       <BackButton className="mb-4" />
       <h2>Detail Pengajuan {loaderData.kode_request}</h2>
-      <div className="row row-cols-8">
-        <div className="col-12 col-sm-10 mb-3">
-          <label htmlFor="exampleFormControlInput2" className="form-label">
-            Nama Pemohon
-          </label>
+
+      {/* Informasi Umum */}
+      <div className="row">
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Nama Pemohon</label>
           <input
-            type="text"
             className="form-control"
-            id="exampleFormControlInput2"
             value={loaderData.nama_pemohon}
             disabled
           />
         </div>
-      </div>
-      <div className="row row-cols-8">
-        <div className="col-12 col-sm-10 mb-3">
-          <label htmlFor="exampleFormControlInput3" className="form-label">
-            Nama Bagian
-          </label>
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Nama Bagian</label>
           <input
-            type="text"
             className="form-control"
-            id="exampleFormControlInput3"
             value={loaderData.nama_bagian}
             disabled
           />
         </div>
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Tanggal Pengajuan</label>
+          <input
+            className="form-control"
+            value={formatDate(loaderData.tanggal_request)}
+            disabled
+          />
+        </div>
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Status Pengajuan</label>
+          <input
+            className={`form-control fw-bold ${
+              loaderData.status_request === "Selesai"
+                ? "text-success"
+                : loaderData.status_request === "Ditolak"
+                ? "text-danger"
+                : "text-warning"
+            }`}
+            value={loaderData.status_request}
+            disabled
+          />
+        </div>
       </div>
-      <div className="row"></div>
+
+      {/* Catatan */}
+      <div className="row">
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Catatan Pemohon</label>
+          <textarea
+            className="form-control"
+            rows={3}
+            value={loaderData.catatan_pemohon || "-"}
+            disabled
+          />
+        </div>
+        <div className="col-12 col-sm-6 mb-3">
+          <label className="form-label">Catatan Penyetuju</label>
+          <textarea
+            className="form-control"
+            rows={3}
+            value={catatanPenyetuju || loaderData.catatan_penyetuju || ""}
+            onChange={(e) => setCatatanPenyetuju(e.target.value)}
+            disabled={
+              !user ||
+              user.role !== "Kasubbag TURT" ||
+              loaderData.status_request !== "Menunggu Persetujuan"
+            }
+            placeholder={
+              loaderData.catatan_penyetuju ? loaderData.catatan_penyetuju : "-"
+            }
+          />
+        </div>
+      </div>
+
+      {/* Detail Barang */}
+      <h4 className="mt-4">Daftar Barang</h4>
       {loaderData.Request_Details.map((detail) => (
-        <div key={detail.id} className="row">
-          <div className="col-sm-8 col-md-9 mb-3">
-            <label htmlFor="exampleFormControlInput2" className="form-label">
-              Nama Barang
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput2"
-              value={detail.Barang.nama_barang}
-              disabled
-            />
+        <div
+          key={detail.id}
+          className={`row align-items-center border rounded p-2 mb-2 ${
+            detail.status === "Disetujui"
+              ? "border-success"
+              : detail.status === "Ditolak"
+              ? "border-danger"
+              : ""
+          }`}
+        >
+          <div className="col-md-5">
+            <strong>{detail.Barang.nama_barang}</strong>
+            <div className="text-muted">
+              Jumlah: {detail.jumlah} {detail.Barang.satuan}
+            </div>
           </div>
-          <div className="col-sm-2 col-md-1 mb-3">
-            <label htmlFor="exampleFormControlInput2" className="form-label">
-              Jumlah
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleFormControlInput2"
-              value={detail.jumlah}
-              disabled
-            />
-          </div>
+
+          {/* Untuk role Kasubbag TURT yang sedang menyetujui */}
+          {user?.role === "Kasubbag TURT" &&
+          loaderData.status_request === "Menunggu Persetujuan" ? (
+            <div className="col-md-7 text-end">
+              <button
+                className={`btn me-2 ${
+                  decisions[detail.id] === "Disetujui"
+                    ? "btn-success"
+                    : "btn-outline-success"
+                }`}
+                onClick={() => handleDecision(detail.id, "Disetujui")}
+              >
+                ✅ Setujui
+              </button>
+              <button
+                className={`btn ${
+                  decisions[detail.id] === "Ditolak"
+                    ? "btn-danger"
+                    : "btn-outline-danger"
+                }`}
+                onClick={() => handleDecision(detail.id, "Ditolak")}
+              >
+                ❌ Tolak
+              </button>
+            </div>
+          ) : (
+            // Untuk user lain: tampilkan status saja
+            <div className="col-md-7 text-end">
+              <span
+                className={`fw-bold ${
+                  detail.status === "Disetujui"
+                    ? "text-success"
+                    : detail.status === "Ditolak"
+                    ? "text-danger"
+                    : "text-secondary"
+                }`}
+              >
+                {detail.status
+                  ? detail.status === "Disetujui"
+                    ? "Disetujui"
+                    : "Ditolak"
+                  : "Menunggu Persetujuan"}
+              </span>
+            </div>
+          )}
         </div>
       ))}
-      <table className="table table-bordered text-center">
-        <thead>
-          <tr>
-            <th>Status Persetujuan</th>
-            <th>Status Tindak Lanjut</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>{renderStatus()}</tr>
-          <tr>
-            <td>Andi Nur Hasbi Alauddin, S.E,. M.H.</td>
-            <td>Muhammad Andy Alfariz, A.Md.Ak.</td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="mt-3">
+
+      {/* Tombol Aksi */}
+      <div className="mt-4 d-flex gap-2">
         {user?.role === "Kasubbag TURT" &&
           loaderData.status_request === "Menunggu Persetujuan" && (
-            <>
+            <button
+              className="btn btn-success"
+              onClick={handleSubmitApproval}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <>
-                  <button
-                    onClick={() =>
-                      handleAction("approve", "Request approved successfully")
-                    }
-                    className="btn btn-success me-2"
-                    disabled
-                  >
-                    Setujui
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleAction("reject", "Request rejected successfully")
-                    }
-                    className="btn btn-danger me-2"
-                    disabled
-                  >
-                    Tolak
-                  </button>
+                  <span className="spinner-border spinner-border-sm"></span>{" "}
+                  Mengirim...
                 </>
               ) : (
-                <>
-                  <button
-                    onClick={() =>
-                      handleAction("approve", "Request approved successfully")
-                    }
-                    className="btn btn-success me-2"
-                  >
-                    Setujui
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleAction("reject", "Request rejected successfully")
-                    }
-                    className="btn btn-danger me-2"
-                  >
-                    Tolak
-                  </button>
-                </>
+                "Kirim Persetujuan"
               )}
-            </>
+            </button>
           )}
 
         {user?.role === "Pengelola BMN" &&
-          loaderData.status_request === "Disetujui" && (
-            <>
+          loaderData.status_request === "Dalam Proses" && (
+            <button
+              className="btn btn-primary"
+              onClick={handleFinish}
+              disabled={isLoading}
+            >
               {isLoading ? (
-                <button
-                  onClick={() =>
-                    handleAction("finish", "Request finished successfully")
-                  }
-                  className="btn btn-primary me-2"
-                  disabled
-                >
-                  <span className="spinner-border spinner-border-sm"></span>
-                  Loading...
-                </button>
+                <>
+                  <span className="spinner-border spinner-border-sm"></span>{" "}
+                  Menyelesaikan...
+                </>
               ) : (
-                <button
-                  onClick={() =>
-                    handleAction("finish", "Request finished successfully")
-                  }
-                  className="btn btn-primary me-2"
-                >
-                  Selesaikan
-                </button>
+                "Selesaikan Request"
               )}
-            </>
+            </button>
           )}
 
+        {/* Tombol Download */}
         {loaderData.status_request === "Selesai" && (
           <a
             href={`${API_BASE_URL}/request/${loaderData.kode_request}/download`}
@@ -253,42 +300,17 @@ function DetailRiwayatPengajuan() {
             rel="noreferrer"
             className="btn btn-success"
           >
-            Download
+            <i className="bi bi-download me-2"></i> Download Dokumen
           </a>
         )}
       </div>
-      {/*       
-      {user &&
-        user.role === "Kasubbag TURT" &&
-        loaderData.status_request === "Menunggu Persetujuan" && (
-          <button onClick={handleSetujui} className="btn btn-success">
-            Setujui
-          </button>
-        )}
-      {user &&
-        user.role === "Pengelola BMN" &&
-        loaderData.status_request === "Disetujui" && (
-          <button onClick={handleSelesai} className="btn btn-primary">
-            Selesaikan
-          </button>
-        )}
-      {loaderData.status_request === "Selesai" && (
-        <a
-          className="navbar-brand"
-          href={`http://localhost:3000/request/${loaderData.kode_request}/download`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button className="btn btn-success">Download</button>
-        </a>
-      )} */}
     </div>
   );
 }
 
 export default DetailRiwayatPengajuan;
 
-export async function loader({ req, params }) {
+export async function loader({ params }) {
   const kode_request = params.kode_request;
   const response = await fetch(`${API_BASE_URL}/request/${kode_request}`);
   const data = await response.json();

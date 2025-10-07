@@ -130,6 +130,7 @@ function FormPengajuanBarang() {
     const data = {
       nama_pemohon: formDataNama.get("nama_pemohon"),
       nama_bagian: formDataNama.get("nama_bagian"),
+      catatan_pemohon: formDataNama.get("catatan_pemohon"),
       barang: payload,
     };
 
@@ -149,10 +150,7 @@ function FormPengajuanBarang() {
       Swal.fire({
         icon: "success",
         title: "Pengajuan berhasil dikirim!",
-        text: "Anda akan diarahkan ke halaman Riwayat Pengajuan.",
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
+        text: `Kode Request Anda ${response.data.request.kode_request}.`,
         allowOutsideClick: false,
         didClose: () => navigate("/riwayat-pengajuan"),
       });
@@ -249,6 +247,15 @@ function FormPengajuanBarang() {
               </div>
             </div>
           ))}
+
+          {/* TextArea */}
+          <label className="form-label">Catatan Pemohon (Optional)</label>
+          <textarea
+            className="form-control mb-3"
+            placeholder="Tuliskan catatan pemohon..."
+            id="floatingTextarea2"
+            name="catatan_pemohon"
+          ></textarea>
 
           {/* Error */}
           {error && (
