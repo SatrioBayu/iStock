@@ -248,6 +248,15 @@ function FormPengajuanBarang() {
             </div>
           ))}
 
+          {/* Tambah Barang */}
+          <button
+            type="button"
+            className="d-flex btn btn-success mb-3"
+            onClick={handleAddRow}
+          >
+            + Tambah Barang
+          </button>
+
           {/* TextArea */}
           <label className="form-label">Catatan Pemohon (Optional)</label>
           <textarea
@@ -263,15 +272,6 @@ function FormPengajuanBarang() {
               {error}
             </div>
           )}
-
-          {/* Tambah Barang */}
-          <button
-            type="button"
-            className="d-flex btn btn-success"
-            onClick={handleAddRow}
-          >
-            + Tambah Barang
-          </button>
 
           {/* Submit */}
           <button

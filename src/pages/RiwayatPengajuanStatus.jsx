@@ -38,7 +38,14 @@ function RiwayatPengajuanStatus() {
     (item) => item.status_request?.toLowerCase() === label.toLowerCase()
   );
 
-  return <RiwayatTable title={label} data={filtered} loading={loading} />;
+  return (
+    <RiwayatTable
+      title={label}
+      data={filtered}
+      loading={loading}
+      label={label}
+    />
+  );
 }
 
 export default RiwayatPengajuanStatus;

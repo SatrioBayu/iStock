@@ -1,9 +1,14 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../config";
 
-function RiwayatTable({ title, data, loading }) {
+function RiwayatTable({ title, data, loading, label }) {
   const [pencarian, setPencarian] = useState("");
+  const [downloading, setDownloading] = useState(false);
+
+  console.log(label);
 
   const filteredData = !loading
     ? data.filter((item) => {
@@ -20,9 +25,56 @@ function RiwayatTable({ title, data, loading }) {
       })
     : [];
 
+  const handleDownloadAll = async () => {
+    try {
+      setDownloading(true);
+      const response = await fetch(`${API_BASE_URL}/request/download`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Gagal mendownload file");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "All_Requests.zip"; // nama file ZIP
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Semua request berhasil diunduh",
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Terjadi kesalahan saat mendownload semua request",
+      });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <div className="border rounded p-3 my-3 table-responsive">
-      <h5 className="mb-0">Riwayat Pengajuan Barang yang {title}</h5>
+      <h5>Riwayat Pengajuan Barang yang {title}</h5>
+      {label === "Selesai" && (
+        <button
+          className="btn btn-primary"
+          onClick={handleDownloadAll}
+          disabled={downloading}
+        >
+          {downloading ? "Downloading..." : "Download"}
+        </button>
+      )}
       <div className="my-3 gy-2 row row-cols-1 row-cols-sm-3">
         <div className="col">
           <input
