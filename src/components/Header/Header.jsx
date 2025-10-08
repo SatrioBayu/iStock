@@ -12,7 +12,7 @@ function Header() {
 
   return (
     <header>
-      <nav className="navbar navbar-expand-md bg-body-tertiary sticky-top">
+      <nav className="navbar mb-5 navbar-expand-md bg-body-tertiary sticky-top">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img

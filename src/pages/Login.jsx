@@ -51,8 +51,8 @@ export default function Login() {
         <p className={`my-2 ${styles["secondary"]}`}>Login Admin</p>
         <form onSubmit={handleSubmit}>
           <div className="input-group mb-3">
-            <span className="input-group-text" id="visible-addon">
-              @
+            <span className="input-group-text" id="username-addon">
+              <i className="bi bi-person"></i>
             </span>
             <input
               type="text"
@@ -63,8 +63,8 @@ export default function Login() {
             />
           </div>
           <div className="input-group mb-3">
-            <span className="input-group-text" id="visible-addon">
-              @
+            <span className="input-group-text" id="password-addon">
+              <i className="bi bi-lock"></i>
             </span>
             <input
               type="password"
