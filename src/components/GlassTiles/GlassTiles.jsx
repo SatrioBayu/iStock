@@ -49,12 +49,7 @@ const GlassTiles = () => {
                   styles.fadeIn
                 } ${isActive ? styles.active : ""} flex-fill`}
                 onClick={() =>
-                  !isActive &&
-                  navigate(
-                    item.status
-                      ? `/riwayat-pengajuan/${item.status}`
-                      : `/riwayat-pengajuan`
-                  )
+                  !isActive && navigate(item.status ? `${item.status}` : ``)
                 }
               >
                 <div className={styles.iconWrapper}>

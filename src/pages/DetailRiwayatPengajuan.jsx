@@ -421,7 +421,7 @@ function DetailRiwayatPengajuan() {
         icon: "success",
         title: "Berhasil",
         text: "Persetujuan berhasil dikirim.",
-        didClose: () => navigate("/riwayat-pengajuan"),
+        didClose: () => navigate("/dashboard/riwayat-pengajuan"),
       });
     } catch (err) {
       Swal.fire({ icon: "error", title: "Error", text: err.message });
@@ -451,7 +451,7 @@ function DetailRiwayatPengajuan() {
         icon: "success",
         title: "Berhasil",
         text: "Request berhasil diselesaikan.",
-        didClose: () => navigate("/riwayat-pengajuan"),
+        didClose: () => navigate("/dashboard/riwayat-pengajuan"),
       });
     } catch (err) {
       Swal.fire({ icon: "error", title: "Error", text: err.message });

@@ -1,0 +1,152 @@
+.landingWrapper {
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* === HERO SECTION === */
+.heroSection {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.appName {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #0d6efd;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #212529;
+  line-height: 1.4;
+}
+
+.highlight {
+  color: #198754;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-top: 1rem;
+  max-width: 500px;
+}
+
+.primaryBtn {
+  font-size: 1.1rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+}
+
+.illustrationWrapper {
+  position: relative;
+  perspective: 1000px;
+  display: inline-block;
+}
+
+.illustration {
+  max-width: 90%;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: rotateY(0deg) rotateX(0deg);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.illustrationWrapper:hover .illustration {
+  transform: rotateY(12deg) rotateX(5deg) scale(1.03);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* === FEATURES SECTION === */
+.featuresSection {
+  padding: 100px 0;
+  background-color: #f8f9fa;
+}
+
+.featureBox {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  height: 100%; /* 🔥 membuat semua box sama tinggi */
+}
+
+.featureBox:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+  font-size: 40px;
+  color: #0d6efd;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #212529;
+}
+
+.sectionSubtitle {
+  max-width: 650px;
+  margin: 0 auto;
+  color: #6c757d;
+}
+
+/* === PREVIEW SECTION === */
+.previewSection {
+  background: #f8f9fa;
+  padding: 6rem 2rem;
+}
+
+/* .previewWrapper {
+  margin-top: 2rem;
+}
+
+.previewImage {
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: rotateY(0deg) rotateX(0deg);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.previewWrapper:hover .previewImage {
+  transform: rotateY(10deg) rotateX(10deg) scale(1.03);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+} */
+
+.previewImage {
+  max-width: 90%;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transform: scale(1);
+  transition: all 0.6s ease;
+  filter: brightness(1);
+}
+
+.previewWrapper:hover .previewImage {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.25);
+}
+
+/* === FOOTER === */
+.footer {
+  background-color: #ffffff;
+  padding: 2.5rem 1rem;
+  border-top: 1px solid #dee2e6;
+  font-size: 0.95rem;
+  color: #6c757d;
+}

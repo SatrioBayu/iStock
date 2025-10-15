@@ -9,21 +9,22 @@ import Login from "./pages/Login";
 import DetailBarang from "./pages/DetailBarang";
 import PrivateRoute from "./pages/PrivateRoute";
 import RiwayatPengajuanStatus from "./pages/RiwayatPengajuanStatus";
+import LandingPage from "./components/LandingPage/LandingPage";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
+      element: <LandingPage />,
+    },
+    {
+      path: "/dashboard",
       element: <RootLayout />,
       children: [
         {
           path: "",
           element: <Home />,
         },
-        // {
-        //   path: "detail-barang/:barcode",
-        //   element: <DetailBarang />,
-        // },
         {
           element: (
             <PrivateRoute allowedRoles={["Pengelola BMN", "Kasubbag TURT"]} />

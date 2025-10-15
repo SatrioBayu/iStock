@@ -28,7 +28,7 @@ export default function Login() {
         throw new Error(result.errors[0].message || "Login failed");
       }
       await login(result.token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
       setIsLoading(false);

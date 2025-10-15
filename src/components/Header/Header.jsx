@@ -14,7 +14,7 @@ function Header() {
     <header>
       <nav className="navbar mb-5 navbar-expand-md bg-body-tertiary sticky-top">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to="/">
             <img
               src="/iStock.png"
               alt="Logo"
@@ -22,7 +22,7 @@ function Header() {
               height="30"
               className="d-inline-block align-text-center"
             />
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -37,7 +37,8 @@ function Header() {
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
               <NavLink
-                to="/"
+                to=""
+                end
                 className={`nav-link ${({ isActive }) =>
                   isActive ? "active" : undefined}`}
               >

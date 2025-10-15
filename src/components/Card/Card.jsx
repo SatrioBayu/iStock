@@ -39,7 +39,7 @@ function Card({ nama_barang, stok, barcode, foto }) {
       {user ? (
         <Link
           className="text-decoration-none text-dark"
-          to={`/detail-barang/${barcode}`}
+          to={`detail-barang/${barcode}`}
         >
           {CardContent}
         </Link>

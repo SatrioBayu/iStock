@@ -152,7 +152,7 @@ function FormPengajuanBarang() {
         title: "Pengajuan berhasil dikirim!",
         text: `Kode Request Anda ${response.data.request.kode_request}.`,
         allowOutsideClick: false,
-        didClose: () => navigate("/riwayat-pengajuan"),
+        didClose: () => navigate("/dashboard/riwayat-pengajuan"),
       });
     } catch (err) {
       console.error(err);
