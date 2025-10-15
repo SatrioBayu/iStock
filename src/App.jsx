@@ -10,6 +10,7 @@ import DetailBarang from "./pages/DetailBarang";
 import PrivateRoute from "./pages/PrivateRoute";
 import RiwayatPengajuanStatus from "./pages/RiwayatPengajuanStatus";
 import LandingPage from "./components/LandingPage/LandingPage";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
   const router = createBrowserRouter([
@@ -55,6 +56,10 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
   ]);
 
