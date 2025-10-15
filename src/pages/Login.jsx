@@ -85,7 +85,7 @@ export default function Login() {
         </form>
         {error && <p className="text-danger">{error}</p>}
 
-        <NavLink to="/">
+        <NavLink to="/dashboard">
           <p className="mb-0">Kembali ke Beranda</p>
         </NavLink>
       </div>
