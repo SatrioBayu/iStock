@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.css";
 
@@ -6,98 +5,72 @@ export default function LandingPage() {
   return (
     <div className={styles.landingWrapper}>
       {/* ===== HERO SECTION ===== */}
-      <section className={`container-fluid ${styles.heroSection}`}>
-        <div className="row align-items-center">
-          <div className="col-lg-6 text-center text-lg-start">
-            <h1 className={styles.appName}>iStock</h1>
-            <h2 className={styles.title}>
-              Sistem Cerdas untuk <br />
-              <span className={styles.highlight}>
-                Manajemen Persediaan Barang
-              </span>
-            </h2>
-            <p className={styles.subtitle}>
-              iStock membantu unit kerja dalam mengelola stok, melakukan
-              pengajuan kebutuhan barang, serta memantau distribusi persediaan
-              dengan cepat, akurat, dan transparan.
-            </p>
-            <div className="d-flex justify-content-center justify-content-lg-start gap-3 mt-4">
-              <Link to="dashboard">
-                <button className={`btn btn-primary ${styles.primaryBtn}`}>
-                  Masuk ke Dashboard
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="col-lg-6 mt-5 mt-lg-0 text-center">
-            <div className={styles.illustrationWrapper}>
-              <img
-                src="/iStock.png"
-                alt="Inventory Illustration"
-                className={styles.illustration}
-              />
-            </div>
-          </div>
+      <section className={`${styles.section} ${styles.hero}`}>
+        <div className={styles.content}>
+          <h1 className={styles.appName}>iStock</h1>
+          <h2 className={styles.subtitleEmphasis}>
+            Pengadilan Tinggi Tata Usaha Negara Makassar
+          </h2>
+          <p className={styles.subtitle}>
+            Sistem Cerdas untuk Manajemen Persediaan Barang
+          </p>
+          <Link to="dashboard">
+            <button className="btn btn-primary mt-3 px-4 py-2">
+              Masuk ke Dashboard
+            </button>
+          </Link>
         </div>
       </section>
 
       {/* ===== FEATURES SECTION ===== */}
-      <section className={styles.featuresSection}>
-        <div className="container text-center">
-          <h2 className={styles.sectionTitle}>Fitur Utama iStock</h2>
+      <section className={styles.features}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Fitur Unggulan</h2>
           <p className={styles.sectionSubtitle}>
-            Dirancang untuk mendukung proses pengelolaan gudang dan permintaan
-            barang agar lebih teratur dan efisien.
+            Dirancang untuk memudahkan pengelolaan gudang dan proses distribusi
+            barang.
           </p>
 
-          <div className="row mt-5">
-            <div className="col-md-4 mb-4">
-              <div className={styles.featureBox}>
-                <i className={`bi bi-box-seam ${styles.featureIcon}`}></i>
-                <h5>Manajemen Stok Otomatis</h5>
-                <p>
-                  Pantau jumlah barang masuk dan keluar secara real-time. Sistem
-                  akan memberi peringatan saat stok menipis.
-                </p>
-              </div>
+          <div className={styles.featuresGrid}>
+            <div className={styles.featureCard}>
+              <i className={`bi bi-box-seam ${styles.featureIcon}`}></i>
+              <h5>Manajemen Stok Otomatis</h5>
+              <p>
+                Pantau stok barang masuk dan keluar secara real-time dengan
+                notifikasi stok menipis.
+              </p>
             </div>
 
-            <div className="col-md-4 mb-4">
-              <div className={styles.featureBox}>
-                <i
-                  className={`bi bi-file-earmark-plus ${styles.featureIcon}`}
-                ></i>
-                <h5>Pengajuan Barang Online</h5>
-                <p>
-                  Permudah proses permintaan barang antar unit kerja secara
-                  digital, lengkap dengan status dan riwayat pengajuan.
-                </p>
-              </div>
+            <div className={styles.featureCard}>
+              <i
+                className={`bi bi-file-earmark-plus ${styles.featureIcon}`}
+              ></i>
+              <h5>Pengajuan Barang Online</h5>
+              <p>
+                Ajukan kebutuhan barang antar unit kerja dengan cepat,
+                transparan, dan tanpa kertas.
+              </p>
             </div>
 
-            <div className="col-md-4 mb-4">
-              <div className={styles.featureBox}>
-                <i className={`bi bi-clipboard-data ${styles.featureIcon}`}></i>
-                <h5>Laporan & Analisis</h5>
-                <p>
-                  Dapatkan laporan penggunaan barang, pengadaan, dan stok dalam
-                  format yang mudah dibaca untuk keperluan monitoring.
-                </p>
-              </div>
+            <div className={styles.featureCard}>
+              <i className={`bi bi-clipboard-data ${styles.featureIcon}`}></i>
+              <h5>Laporan & Analisis</h5>
+              <p>
+                Dapatkan laporan visual interaktif untuk membantu evaluasi dan
+                pengambilan keputusan.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ===== PREVIEW SECTION ===== */}
-      <section className={styles.previewSection}>
-        <div className="container text-center">
-          <h2 className={styles.sectionTitle}>Antarmuka yang Intuitif</h2>
+      <section className={styles.preview}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Dashboard Interaktif</h2>
           <p className={styles.sectionSubtitle}>
-            Dashboard iStock dirancang untuk memberikan kemudahan akses ke
-            seluruh fitur, mulai dari pencatatan barang hingga laporan
-            penggunaan.
+            Visualisasi stok, pengajuan, dan distribusi barang dalam satu
+            tampilan yang mudah dipahami.
           </p>
           <div className={styles.previewWrapper}>
             <img
@@ -111,16 +84,13 @@ export default function LandingPage() {
 
       {/* ===== FOOTER ===== */}
       <footer className={styles.footer}>
-        <div className="container text-center">
-          <p className="mb-0">
-            © {new Date().getFullYear()} <strong>iStock</strong> — Sistem
-            Manajemen Persediaan Barang.
-          </p>
-          <small className="text-muted">
-            Dibuat untuk mendukung efisiensi pengelolaan gudang & distribusi
-            barang.
-          </small>
-        </div>
+        <p>
+          © {new Date().getFullYear()} <strong>iStock</strong> — Sistem
+          Manajemen Persediaan Barang.
+        </p>
+        <small>
+          Pengadilan Tinggi Tata Usaha Negara Makassar • Semua Hak Dilindungi.
+        </small>
       </footer>
     </div>
   );

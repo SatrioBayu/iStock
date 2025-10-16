@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
-import styles from "../components/Login.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../store/auth-context";
 import { API_BASE_URL } from "../config";
+import styles from "./Login.module.css";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,70 +23,68 @@ export default function Login() {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      if (!response.ok) {
-        setIsLoading(false);
-        throw new Error(result.errors[0].message || "Login failed");
-      }
+      if (!response.ok)
+        throw new Error(result.errors?.[0]?.message || "Login gagal");
+
       await login(result.token);
       navigate("/dashboard");
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={`${styles.wrapper} ${styles.bg}`}>
-      <div className={`${styles.isi} px-3 py-5`}>
-        <div className="row align-items-center gy-2">
-          <div className="col-md-2">
-            <img src="iStock.png" className={`${styles["img-logo"]}`} alt="" />
-          </div>
-          <div className="col-md-10">
-            <h5 className="mb-0 fw-bold">
-              Manajemen Persediaan PT TUN Makassar
-            </h5>
-          </div>
+    <div className={styles.loginPage}>
+      <div className={styles.loginCard}>
+        <div className={styles.logoWrapper}>
+          <img src="/iStock.png" alt="Logo" className={styles.logo} />
+          <h5>Manajemen Persediaan</h5>
+          <h5>PT TUN Makassar</h5>
+          <p className={styles.subtitle}>Login Admin</p>
         </div>
-        <p className={`my-2 ${styles["secondary"]}`}>Login Admin</p>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group mb-3">
-            <span className="input-group-text" id="username-addon">
-              <i className="bi bi-person"></i>
-            </span>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <i className="bi bi-person"></i>
             <input
               type="text"
-              className="form-control"
-              placeholder="Username"
               name="username"
+              placeholder="Username"
               required
+              className={styles.input}
             />
           </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text" id="password-addon">
-              <i className="bi bi-lock"></i>
-            </span>
+
+          <div className={styles.inputGroup}>
+            <i className="bi bi-lock"></i>
             <input
               type="password"
-              className="form-control"
-              placeholder="Password"
               name="password"
+              placeholder="Password"
               required
+              className={styles.input}
             />
           </div>
-          {isLoading ? (
-            <button className={`btn ${styles["btn-login"]} disabled mb-3`}>
-              <span className="spinner-border spinner-border-sm"></span>
-              Loading...
-            </button>
-          ) : (
-            <button className={`btn ${styles["btn-login"]} mb-3`}>Login</button>
-          )}
-        </form>
-        {error && <p className="text-danger">{error}</p>}
 
-        <NavLink to="/dashboard">
-          <p className="mb-0">Kembali ke Beranda</p>
+          {error && <p className={styles.error}>{error}</p>}
+
+          <button
+            type="submit"
+            className={`${styles.btnLogin} ${isLoading ? styles.loading : ""}`}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="spinner-border spinner-border-sm"></span>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
+
+        <NavLink to="/dashboard" className={styles.backLink}>
+          Kembali ke Beranda
         </NavLink>
       </div>
     </div>

@@ -11,7 +11,7 @@
 }
 
 .illustration {
-  max-width: 240px;
+  max-width: 260px;
   height: auto;
   filter: drop-shadow(0 8px 16px rgba(13, 110, 253, 0.2));
 }
@@ -21,7 +21,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   100% {
     transform: translateY(0px);

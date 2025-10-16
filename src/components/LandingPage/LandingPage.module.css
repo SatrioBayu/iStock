@@ -1,152 +1,215 @@
-.landingWrapper {
-  overflow-x: hidden;
-  font-family: "Poppins", sans-serif;
+/* ===== GLOBAL STYLE ===== */
+.landingWrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* === HERO SECTION === */
-.heroSection {
+.landingWrapper {
+  font-family: "Poppins", sans-serif;
+  color: #f5faff;
+  background: url("/oneforall.jpg") center center / cover no-repeat fixed;
+  background-attachment: fixed;
+  background-color: #000; /* fallback */
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+/* ===== SCROLL-LINKED ANIMATION ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@scroll-timeline fadeScroll {
+  source: auto;
+  orientation: block;
+}
+
+.section {
+  animation: fadeUp 1s ease-out both;
+  animation-timeline: fadeScroll;
+  animation-range: entry 20% cover 30%;
+}
+
+/* ===== SHARED BACKGROUND ===== */
+.hero,
+.features,
+.preview {
+  position: relative;
+  color: #fff;
+  padding: 6rem 0;
+  background: transparent;
+}
+
+.hero::before,
+.features::before,
+.preview::before {
+  display: none;
+}
+
+.hero .content,
+.features .container,
+.preview .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
   min-height: 100vh;
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  text-align: center;
 }
 
 .appName {
   font-size: 4rem;
   font-weight: 800;
-  color: #0d6efd;
+  background: linear-gradient(90deg, #ffffff, #cbe8ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.4rem;
 }
 
-.title {
-  font-size: 2rem;
+.subtitleEmphasis {
+  font-size: 1.4rem;
   font-weight: 600;
-  color: #212529;
-  line-height: 1.4;
-}
-
-.highlight {
-  color: #198754;
+  color: #f2fbff;
+  margin-bottom: 1rem;
 }
 
 .subtitle {
   font-size: 1.1rem;
-  color: #6c757d;
-  margin-top: 1rem;
-  max-width: 500px;
+  color: #e7f7ff;
 }
 
-.primaryBtn {
-  font-size: 1.1rem;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-}
-
-.illustrationWrapper {
-  position: relative;
-  perspective: 1000px;
-  display: inline-block;
-}
-
-.illustration {
-  max-width: 90%;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transform: rotateY(0deg) rotateX(0deg);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-
-.illustrationWrapper:hover .illustration {
-  transform: rotateY(12deg) rotateX(5deg) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-}
-
-/* === FEATURES SECTION === */
-.featuresSection {
-  padding: 100px 0;
-  background-color: #f8f9fa;
-}
-
-.featureBox {
-  background: #fff;
-  border-radius: 16px;
-  padding: 30px 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  height: 100%; /* 🔥 membuat semua box sama tinggi */
-}
-
-.featureBox:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-}
-
-.featureIcon {
-  font-size: 40px;
-  color: #0d6efd;
-  margin-bottom: 20px;
+/* ===== FEATURES SECTION ===== */
+.features {
+  background-attachment: fixed;
 }
 
 .sectionTitle {
   font-weight: 700;
   font-size: 2rem;
-  color: #212529;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
 }
 
 .sectionSubtitle {
-  max-width: 650px;
-  margin: 0 auto;
-  color: #6c757d;
+  font-size: 1.05rem;
+  color: #d8e3ed;
+  margin-bottom: 3rem;
 }
 
-/* === PREVIEW SECTION === */
-.previewSection {
-  background: #f8f9fa;
-  padding: 6rem 2rem;
+.featuresGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
-/* .previewWrapper {
+@media (min-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+}
+
+.featureIcon {
+  font-size: 2.2rem;
+  color: #00bcd4;
+  margin-bottom: 1rem;
+}
+
+/* ===== PREVIEW SECTION ===== */
+.previewWrapper {
+  display: flex;
+  justify-content: center;
   margin-top: 2rem;
 }
 
-.previewImage {
-  max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  transform: rotateY(0deg) rotateX(0deg);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+    filter: brightness(100%);
+  }
+  50% {
+    transform: scale(1.03);
+    filter: brightness(105%);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(100%);
+  }
 }
 
-.previewWrapper:hover .previewImage {
-  transform: rotateY(10deg) rotateX(10deg) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-} */
-
 .previewImage {
-  max-width: 90%;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  transform: scale(1);
-  transition: all 0.6s ease;
-  filter: brightness(1);
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: breathe 6s ease-in-out infinite;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.previewWrapper:hover .previewImage {
+.previewImage:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(0, 200, 255, 0.25);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
-/* === FOOTER === */
+/* ===== GRADIENT TRANSITION TO FOOTER ===== */
+.preview::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #001824 100%);
+  z-index: 2;
+}
+
+/* ===== FOOTER ===== */
 .footer {
-  background-color: #ffffff;
-  padding: 2.5rem 1rem;
-  border-top: 1px solid #dee2e6;
-  font-size: 0.95rem;
-  color: #6c757d;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #001824;
+  color: #d0dbe7;
+  font-size: 0.9rem;
+}
+
+.footer strong {
+  color: #00bcd4;
 }

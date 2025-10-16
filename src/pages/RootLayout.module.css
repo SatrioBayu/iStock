@@ -1,0 +1,38 @@
+.layoutWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  font-family: "Inter", sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 1400px;
+  background: #ffffff;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+/* Efek hover lembut di area konten utama */
+.contentWrapper:hover {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: 1.5rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

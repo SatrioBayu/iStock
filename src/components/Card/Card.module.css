@@ -1,4 +1,4 @@
-.card-teks {
+/* .card-teks {
   color: #ff7158;
   font-weight: bold;
 }
@@ -11,4 +11,52 @@
 .hover-card {
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.4s ease;
+} */
+
+.cardItem {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  cursor: pointer;
+}
+
+.cardItem:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.imageWrapper {
+  position: relative;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f0ff 0%, #f9fbff 100%);
+}
+
+.cardImage {
+  max-height: 100%;
+  max-width: 80%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.cardItem:hover .cardImage {
+  transform: scale(1.05);
+}
+
+.cardTitle {
+  color: #0d1b2a;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  min-height: 2.4em; /* biar sejajar meski nama panjang */
+}
+
+.stokBadge {
+  font-size: 0.8rem;
+  border-radius: 12px;
+  padding: 0.4em 0.8em;
+  margin-top: 6px;
 }

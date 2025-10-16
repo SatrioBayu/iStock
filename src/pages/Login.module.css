@@ -1,0 +1,121 @@
+.loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, #e8f0ff, #f8fbff);
+  animation: fadeIn 0.8s ease;
+}
+
+.loginCard {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transform: scale(0.95);
+  animation: popIn 0.6s ease forwards;
+}
+
+.logoWrapper img {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #6c757d;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d0d7e2;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f9fafc;
+  transition: all 0.2s ease;
+}
+
+.inputGroup:focus-within {
+  border-color: #007bff;
+  background: #fff;
+}
+
+.inputGroup i {
+  color: #6c757d;
+  margin-right: 8px;
+}
+
+.input {
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.btnLogin {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btnLogin:hover {
+  background-color: #005dc7;
+}
+
+.btnLogin.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 0.9rem;
+}
+
+.backLink {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,152 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.card {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  padding: 2rem 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.title {
+  text-align: center;
+  font-weight: 700;
+  color: #0d6efd;
+  margin-bottom: 2rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.barangBlock {
+  background: #f8faff;
+  border: 1px solid #e1e9f8;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.barangBlock:hover {
+  transform: scale(1.01);
+}
+
+.barangHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #0d6efd;
+  margin-bottom: 0.75rem;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.removeBtn:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.barangGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .barangGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .barangGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  background: white;
+  transition: border 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #0d6efd;
+  outline: none;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.addBtn {
+  display: inline-block;
+  background: #e9f2ff;
+  color: #0d6efd;
+  border: 1px solid #b6d4fe;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addBtn:hover {
+  background: #0d6efd;
+  color: white;
+}
+
+.error {
+  background: #ffe5e5;
+  border: 1px solid #f5c2c7;
+  color: #842029;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.submitBtn:hover {
+  background: #0b5ed7;
+}
