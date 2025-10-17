@@ -6,25 +6,18 @@
 // import { AuthContext } from "../store/auth-context";
 // import TambahBarangModal from "../components/TambahBarangModal/TambahBarangModal";
 // import DataTable from "react-data-table-component";
+// import styles from "./Home.module.css";
 
 // const customStyles = {
-//   rows: {
-//     style: {
-//       fontSize: "1rem", // default sekitar 0.875rem
-//     },
-//   },
+//   rows: { style: { fontSize: "1rem" } },
 //   headCells: {
 //     style: {
 //       fontSize: "1rem",
 //       fontWeight: "600",
-//       backgroundColor: "#f8f9fa", // opsional, biar kayak tabel Bootstrap
+//       backgroundColor: "#f8f9fa",
 //     },
 //   },
-//   cells: {
-//     style: {
-//       fontSize: "0.95rem",
-//     },
-//   },
+//   cells: { style: { fontSize: "0.95rem" } },
 // };
 
 // function Home() {
@@ -41,9 +34,7 @@
 //     try {
 //       const response = await fetch(`${API_BASE_URL}/admin/barang`);
 //       const data = await response.json();
-//       if (!response.ok) {
-//         throw new Error("Error fetching data");
-//       }
+//       if (!response.ok) throw new Error("Error fetching data");
 //       setListBarang(data.data);
 //     } catch (error) {
 //       console.error("Error fetching data:", error);
@@ -60,9 +51,8 @@
 //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
 //         },
 //       });
-//       if (!response.ok) {
-//         throw new Error(response.statusText);
-//       }
+//       if (!response.ok) throw new Error(response.statusText);
+
 //       const blob = await response.blob();
 //       const url = window.URL.createObjectURL(blob);
 //       const a = document.createElement("a");
@@ -71,6 +61,7 @@
 //       document.body.appendChild(a);
 //       a.click();
 //       a.remove();
+
 //       Swal.fire({
 //         icon: "success",
 //         title: "Success",
@@ -87,7 +78,6 @@
 //     }
 //   };
 
-//   // Kolom untuk DataTable
 //   const columns = [
 //     {
 //       name: "Barcode",
@@ -120,15 +110,15 @@
 //   ];
 
 //   return (
-//     <>
-//       <div className="row align-items-center gap-2 mb-4">
-//         <div className="col-md">
-//           <h2 className="mb-0">Daftar Barang</h2>
-//         </div>
-
+//     <div className={styles.dashboardContainer}>
+//       <div className={styles.headerRow}>
+//         <h2 className="mb-0 fw-semibold">📦 Daftar Barang</h2>
 //         {!loading && user && (
-//           <div className="col-md-auto d-flex gap-2">
-//             <button onClick={handleExport} className="btn btn-primary">
+//           <div className="d-flex gap-2">
+//             <button
+//               onClick={handleExport}
+//               className="btn btn-primary shadow-sm"
+//             >
 //               Export Barang Masuk
 //             </button>
 //             <TambahBarangModal onSuccess={fetchData} />
@@ -136,8 +126,10 @@
 //         )}
 //       </div>
 
-//       {/* Tombol Toggle View */}
-//       <div className="mb-3">
+//       <div className="mt-3 mb-4 d-flex justify-content-between align-items-center">
+//         <p className="text-secondary mb-0">
+//           Total Barang: <strong>{listBarang.length}</strong>
+//         </p>
 //         <button
 //           onClick={() => setIsGridView(!isGridView)}
 //           className="btn btn-outline-secondary"
@@ -150,19 +142,23 @@
 //         <Spinner />
 //       ) : listBarang.length > 0 ? (
 //         isGridView ? (
-//           <div className="g-4 row row-cols-1 row-cols-lg-6">
+//           <div className="row g-4">
 //             {listBarang.map((item) => (
-//               <Card
+//               <div
 //                 key={item.barcode}
-//                 nama_barang={item.nama_barang}
-//                 stok={item.stok}
-//                 barcode={item.barcode}
-//                 foto={item.foto}
-//               />
+//                 className="col-12 col-md-4 col-lg-2 d-flex align-items-stretch"
+//               >
+//                 <Card
+//                   nama_barang={item.nama_barang}
+//                   stok={item.stok}
+//                   barcode={item.barcode}
+//                   foto={item.foto}
+//                 />
+//               </div>
 //             ))}
 //           </div>
 //         ) : (
-//           <div className="card shadow-sm p-3">
+//           <div className="card shadow-sm p-3 border-0">
 //             <DataTable
 //               columns={columns}
 //               data={listBarang}
@@ -176,11 +172,17 @@
 //           </div>
 //         )
 //       ) : (
-//         <div className="container text-center py-5">
-//           <h4 className="mt-2">Tidak ada barang untuk saat ini</h4>
+//         <div className="text-center py-5">
+//           <img
+//             src="https://illustrations.popsy.co/white/box.svg"
+//             alt="No Data"
+//             style={{ width: "180px", opacity: 0.8 }}
+//           />
+//           <h5 className="mt-3">Belum ada barang yang tersedia</h5>
+//           <p className="text-secondary">Tambahkan barang baru untuk memulai</p>
 //         </div>
 //       )}
-//     </>
+//     </div>
 //   );
 // }
 
@@ -212,6 +214,9 @@ function Home() {
   const [listBarang, setListBarang] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isGridView, setIsGridView] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -297,6 +302,20 @@ function Home() {
     },
   ];
 
+  // Pagination logic
+  const totalPages = Math.ceil(listBarang.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = listBarang.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
   return (
     <div className={styles.dashboardContainer}>
       <div className={styles.headerRow}>
@@ -330,21 +349,46 @@ function Home() {
         <Spinner />
       ) : listBarang.length > 0 ? (
         isGridView ? (
-          <div className="row g-4">
-            {listBarang.map((item) => (
-              <div
-                key={item.barcode}
-                className="col-12 col-md-4 col-lg-2 d-flex align-items-stretch"
-              >
-                <Card
-                  nama_barang={item.nama_barang}
-                  stok={item.stok}
-                  barcode={item.barcode}
-                  foto={item.foto}
-                />
+          <>
+            <div className="row g-4">
+              {currentItems.map((item) => (
+                <div
+                  key={item.barcode}
+                  className="col-12 col-sm-6 col-md-4 col-lg-2 d-flex align-items-stretch"
+                >
+                  <Card
+                    nama_barang={item.nama_barang}
+                    stok={item.stok}
+                    barcode={item.barcode}
+                    foto={item.foto}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-center align-items-center mt-4 gap-2">
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  disabled={currentPage === 1}
+                  onClick={handlePrevPage}
+                >
+                  « Prev
+                </button>
+                <span className="fw-semibold">
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  disabled={currentPage === totalPages}
+                  onClick={handleNextPage}
+                >
+                  Next »
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <div className="card shadow-sm p-3 border-0">
             <DataTable

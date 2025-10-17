@@ -15,7 +15,7 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="mt-5 bg-light text-dark py-4 border-top">
+    <footer className="bg-light text-dark py-4 border-top">
       <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center">
         {/* Brand + tagline */}
         <div className="mb-2 mb-md-0">

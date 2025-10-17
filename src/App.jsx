@@ -27,12 +27,14 @@ function App() {
           element: <Home />,
         },
         {
-          element: (
-            <PrivateRoute allowedRoles={["Pengelola BMN", "Kasubbag TURT"]} />
-          ),
-          children: [
-            { path: "detail-barang/:barcode", element: <DetailBarang /> },
-          ],
+          // element: (
+          //   <PrivateRoute allowedRoles={["Pengelola BMN", "Kasubbag TURT"]} />
+          // ),
+          // children: [
+          //   { path: "detail-barang/:barcode", element: <DetailBarang /> },
+          // ],
+          path: "detail-barang/:barcode",
+          element: <DetailBarang />,
         },
         {
           path: "pengajuan-barang",
