@@ -212,3 +212,67 @@
     font-size: 0.85rem;
   }
 }
+/* Warna highlight status */
+.table td.approved {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  font-weight: 600;
+}
+
+.table td.partial {
+  background-color: #fff9c4;
+  color: #795548;
+  font-weight: 600;
+}
+
+.table td.rejected {
+  background-color: #ffebee;
+  color: #b71c1c;
+  font-weight: 600;
+}
+
+.table td.pending {
+  background-color: #eceff1;
+  color: #455a64;
+  font-weight: 600;
+}
+
+/* Empty state fallback */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.emptyState img {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.emptyState p {
+  color: #6c757d;
+  font-style: italic;
+  margin: 0;
+}
+
+.notFound {
+  text-align: center;
+  margin-top: 40px;
+  opacity: 0.9;
+}
+
+.notFound img {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.notFound p {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 1rem;
+}
