@@ -92,7 +92,7 @@ function Card({ nama_barang, stok, barcode, foto }) {
 
   return (
     <div className="col">
-      {user ? (
+      {/* {user ? (
         <Link
           className="text-decoration-none text-dark"
           to={`detail-barang/${barcode}`}
@@ -101,7 +101,13 @@ function Card({ nama_barang, stok, barcode, foto }) {
         </Link>
       ) : (
         CardContent
-      )}
+      )} */}
+      <Link
+        className="text-decoration-none text-dark"
+        to={`detail-barang/${barcode}`}
+      >
+        {CardContent}
+      </Link>
     </div>
   );
 }

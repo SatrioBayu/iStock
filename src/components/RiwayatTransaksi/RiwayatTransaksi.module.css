@@ -1,0 +1,105 @@
+/* === WRAPPER DASAR === */
+.container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin-top: 16px;
+}
+
+/* === HEADER AREA === */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0061a8;
+}
+
+/* === TABLE CORE === */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th {
+  background-color: #f4f6f8;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+  color: #333;
+}
+
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  color: #444;
+}
+
+.noData {
+  text-align: center;
+  color: #999;
+  padding: 16px;
+  font-style: italic;
+}
+
+/* === STATUS COLORING (untuk RiwayatRequestBarang) === */
+.pending {
+  background-color: #fff9db;
+  color: #8a6d3b;
+  font-weight: 500;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.approved {
+  background-color: #dff0d8;
+  color: #3c763d;
+  font-weight: 500;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.rejected {
+  background-color: #f2dede;
+  color: #a94442;
+  font-weight: 500;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.done {
+  background-color: #d9edf7;
+  color: #31708f;
+  font-weight: 500;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* === BUTTON DELETE === */
+.deleteButton {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}

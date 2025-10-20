@@ -205,7 +205,7 @@ import Swal from "sweetalert2";
 import { API_BASE_URL } from "../../config";
 import { useParams, useNavigate } from "react-router-dom";
 
-const BarangInfo = ({ barang, onUpdate }) => {
+const BarangInfo = ({ barang, onUpdate, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...barang });
   const [gambarFile, setGambarFile] = useState(null);
@@ -261,12 +261,13 @@ const BarangInfo = ({ barang, onUpdate }) => {
       });
 
       const updated = await res.json();
-      if (!res.ok) throw new Error(updated.message || "Gagal memperbarui data");
+      if (!res.ok)
+        throw new Error(updated.errors[0].message || "Gagal memperbarui data");
 
       onUpdate(updated.data);
       setIsEditing(false);
       setGambarFile(null);
-      navigate(`/detail-barang/${updated.data.barcode}`);
+      navigate(`/dashboard/detail-barang/${updated.data.barcode}`);
 
       Swal.fire({
         icon: "success",
@@ -280,7 +281,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: error.message || "Terjadi kesalahan.",
+        text: error || "Terjadi kesalahan.",
       });
     } finally {
       setIsLoading(false);
@@ -302,6 +303,7 @@ const BarangInfo = ({ barang, onUpdate }) => {
             <button
               className="btn btn-outline-primary btn-sm"
               onClick={() => setIsEditing(true)}
+              disabled={!user}
             >
               <i className="bi bi-pencil me-1"></i> Edit
             </button>

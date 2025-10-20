@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import BarangInfo from "../components/BarangInfo/BarangInfo";
 import RiwayatTransaksi from "../components/RiwayatTransaksi/RiwayatTransaksi";
 import TambahTransaksiModal from "../components/TambahTransaksiModal/TambahTransaksiModal";
 import { API_BASE_URL } from "../config";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../store/auth-context";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton/BackButton";
+import RiwayatRequestBarang from "../components/RiwayatRequestBarang/RiwayatRequestBarang";
 
 const DetailBarang = () => {
   const [barang, setBarang] = useState(null);
   const [riwayat, setRiwayat] = useState([]);
+  const [requestDetails, setRequestDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const { barcode } = useParams();
+  const { user } = useContext(AuthContext);
 
   const fetchData = async () => {
     try {
@@ -23,6 +26,9 @@ const DetailBarang = () => {
 
       setBarang(data.data);
       setRiwayat(data.data.TransaksiPembelians || []);
+      setRequestDetails(
+        (data.data.Request_Details || []).filter((item) => item.status !== null)
+      );
     } catch (err) {
       console.error(err);
     } finally {
@@ -210,12 +216,16 @@ const DetailBarang = () => {
       <BarangInfo
         barang={barang}
         onUpdate={(updatedBarang) => setBarang(updatedBarang)}
+        user={user}
       />
       <RiwayatTransaksi
         riwayat={riwayat}
         onTambahClick={() => setShowModal(true)}
         onDelete={handleDeleteTransaksi}
+        user={user}
       />
+
+      <RiwayatRequestBarang requestDetails={requestDetails} />
 
       <TambahTransaksiModal
         show={showModal}
