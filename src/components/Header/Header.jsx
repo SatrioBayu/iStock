@@ -81,6 +81,15 @@ function Header() {
                 Riwayat Pengajuan
               </NavLink>
 
+              <NavLink
+                to="track-pengajuan"
+                className={({ isActive }) =>
+                  `${styles.navBtn} ${isActive ? styles.active : ""}`
+                }
+              >
+                Lacak Status Pengajuan
+              </NavLink>
+
               {!user ? (
                 <Link to="/login" className="btn btn-success ms-3">
                   Login
@@ -142,6 +151,16 @@ function Header() {
               }
             >
               Riwayat Pengajuan
+            </NavLink>
+
+            <NavLink
+              to="track-pengajuan"
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                `${styles.sidebarLink} ${isActive ? styles.active : ""}`
+              }
+            >
+              Lacak Status Pengajuan
             </NavLink>
           </nav>
 

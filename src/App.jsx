@@ -11,6 +11,7 @@ import PrivateRoute from "./pages/PrivateRoute";
 import RiwayatPengajuanStatus from "./pages/RiwayatPengajuanStatus";
 import LandingPage from "./components/LandingPage/LandingPage";
 import NotFound from "./components/NotFound/NotFound";
+import LacakPengajuan from "./pages/LacakPengajuan";
 
 function App() {
   const router = createBrowserRouter([
@@ -52,6 +53,10 @@ function App() {
               loader: detailRiwayatLoader,
             },
           ],
+        },
+        {
+          path: "track-pengajuan",
+          element: <LacakPengajuan />,
         },
       ],
     },

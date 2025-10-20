@@ -106,7 +106,10 @@ export default function NotFound() {
         Yuk kembali dan temukan stokmu di lokasi yang benar!
       </p>
 
-      <Link to="/" className={`btn btn-primary mt-3 ${styles.backButton}`}>
+      <Link
+        to="/dashboard"
+        className={`btn btn-primary mt-3 ${styles.backButton}`}
+      >
         Kembali ke Beranda
       </Link>
     </div>
