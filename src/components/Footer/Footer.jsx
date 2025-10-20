@@ -18,9 +18,10 @@ function Footer() {
   return (
     <footer className={styles.footer}>
       <p className="mb-0">
-        © {new Date().getFullYear()} <strong>iStock</strong> — Sistem Manajemen
-        Persediaan Barang. • All rights reserved.
+        © {new Date().getFullYear()} <strong>iStock v.4.4</strong> — Sistem
+        Manajemen Persediaan Barang. • All rights reserved.
       </p>
+      <p className="mb-0"></p>
     </footer>
   );
 }
