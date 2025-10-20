@@ -200,16 +200,3 @@
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #001824 100%);
   z-index: 2;
 }
-
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  padding: 2rem 1rem;
-  background: #001824;
-  color: #d0dbe7;
-  font-size: 0.9rem;
-}
-
-.footer strong {
-  color: #00bcd4;
-}

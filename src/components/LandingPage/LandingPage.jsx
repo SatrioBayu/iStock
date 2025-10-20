@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.css";
+import Footer from "../Footer/Footer";
 
 export default function LandingPage() {
   return (
@@ -83,15 +84,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className={styles.footer}>
-        <p>
-          © {new Date().getFullYear()} <strong>iStock</strong> — Sistem
-          Manajemen Persediaan Barang.
-        </p>
-        <small>
-          Pengadilan Tinggi Tata Usaha Negara Makassar • Semua Hak Dilindungi.
-        </small>
-      </footer>
+      <Footer />
     </div>
   );
 }
